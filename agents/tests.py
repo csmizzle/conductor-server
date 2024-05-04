@@ -24,3 +24,26 @@ class GetAllAgentRunsTest(TestCase):
         serializer = AgentRunSerializer(agent_runs, many=True)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class PostAgentRunTest(TestCase):
+
+    def setUp(self) -> None:
+        self.valid_payload = {
+            'task': 'Test Task',
+            'agent_name': 'Test Agent',
+            'output': 'Test Output'
+        }
+        self.invalid_payload = {
+            'task': None,
+            'agent_name': 'Test Agent',
+            'output': 'Test Output'
+        }
+
+    def test_create_valid_agent_run(self):
+        response = client.post(
+            reverse('agents'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
