@@ -1,0 +1,47 @@
+"""
+Run, create, and manage agents
+"""
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from rest_framework import views, status
+from rest_framework.response import Response
+from rest_framework.request import Request
+from agents.crews.marketing import market_email_crew
+from drf_yasg.utils import swagger_auto_schema
+from agents import serializers, models
+
+
+class MarketEmailCrewViewSet(views.APIView):
+    """View for taking market crew requests"""
+    
+    @method_decorator(cache_page(60 * 60 * 2))
+    def get(self, request, *args, **kwargs):
+        data = models.AgentRun.objects.all()
+        serialized_runs = serializers.AgentRunSerializer(data, many=True)
+        return Response(
+            serialized_runs.data,
+            status=status.HTTP_200_OK,
+        )
+
+    @swagger_auto_schema(request_body=serializers.AgentInput)
+    @method_decorator(cache_page(60 * 60 * 2))
+    def post(self, request: Request) -> Response:
+        """Send a request to the marketing team to email the crew
+
+        Args:
+            request (_type_): Request from the client
+        """
+        agent_input = serializers.AgentInput(data=request.data)
+        agent_input.is_valid(raise_exception=True)
+        results = market_email_crew.kickoff(
+            {"input": agent_input.validated_data["task"]}
+        )
+        run = models.AgentRun.objects.create(
+            task=agent_input.validated_data["task"],
+            agent_name="market_email_crew",
+            output=results,
+        )
+        run = run.save()
+        serialized_run = serializers.AgentRunSerializer(run)
+        serialized_run.is_valid(raise_exception=True)
+        return Response(serialized_run.data, status=status.HTTP_201_CREATED)
