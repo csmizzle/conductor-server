@@ -42,4 +42,5 @@ urlpatterns = [
     path('agents/', agent_views.MarketEmailCrewViewSet.as_view(), name='agents'),
     path('search/apollo/', search_views.ApolloSearchView.as_view(), name='search_apollo'),
     path('search/discord/', search_views.DiscordSearchView.as_view(), name='search_discord'),
+    path('search', search_views.PineconeSearchView.as_view(), name='search')
 ]

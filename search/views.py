@@ -4,7 +4,11 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.response import Response
 from rest_framework.request import Request
-from conductor.retrievers.pinecone_ import create_gpt4_pinecone_apollo_retriever, create_gpt4_pinecone_discord_retriever
+from conductor.retrievers.pinecone_ import (
+    create_gpt4_pinecone_apollo_retriever, 
+    create_gpt4_pinecone_discord_retriever,
+)
+from conductor.functions.pinecone_ import search_pinecone
 
 
 apollo_search = create_gpt4_pinecone_apollo_retriever()
@@ -32,4 +36,16 @@ class DiscordSearchView(views.APIView):
         input_serializer = SearchInputSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
         results = apollo_search(input_serializer.data["query"])
+        return Response(results, status=status.HTTP_200_OK)
+
+
+class PineconeSearchView(views.APIView):
+    """Search view for Pinecone data"""
+
+    @swagger_auto_schema(request_body=SearchInputSerializer)
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        """Get Pinecone search results"""
+        input_serializer = SearchInputSerializer(data=request.data)
+        input_serializer.is_valid(raise_exception=True)
+        results = search_pinecone(input_serializer.data["query"])
         return Response(results, status=status.HTTP_200_OK)
