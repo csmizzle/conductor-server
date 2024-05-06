@@ -13,6 +13,7 @@ boto3 = "^1.34.98"
 conductor = {git = "https://github.com/csmizzle/conductor.git"}
 celery = "^5.4.0"
 django-redis = "^5.4.0"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
