@@ -4,6 +4,7 @@ Run, create, and manage agents
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework import views, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from agents.crews.marketing import market_email_crew
@@ -13,6 +14,7 @@ from agents import serializers, models
 
 class MarketEmailCrewViewSet(views.APIView):
     """View for taking market crew requests"""
+    permission_classes = [IsAuthenticated]
     
     @method_decorator(cache_page(60 * 60 * 2))
     def get(self, request, *args, **kwargs):
