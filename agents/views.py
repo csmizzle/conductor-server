@@ -41,7 +41,9 @@ class MarketEmailCrewViewSet(views.APIView):
             agent_name="market_email_crew",
             output=results,
         )
-        run = run.save()
-        serialized_run = serializers.AgentRunSerializer(run)
-        serialized_run.is_valid(raise_exception=True)
-        return Response(serialized_run.data, status=status.HTTP_201_CREATED)
+        run.save()
+        return Response({
+            "task": run.task,
+            "agent_name": run.agent_name,
+            "output": run.output,
+        }, status=status.HTTP_201_CREATED)
