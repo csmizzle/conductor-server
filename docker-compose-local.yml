@@ -1,0 +1,55 @@
+version: '3'
+services:
+  server:
+    container_name: conductor-server
+    image: conductor-server:local
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    ports:
+      - 8000:8000
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_PASSWORD=password
+      - DJANGO_SUPERUSER_EMAIL=admin@test.com
+  redis:
+    container_name: conductor-redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - conductor_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  postgres:
+    container_name: conductor-postgres
+    user: postgres
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - conductor_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+volumes:
+  conductor_redis_data:
+  conductor_postgres_data:
