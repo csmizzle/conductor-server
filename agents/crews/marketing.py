@@ -2,7 +2,7 @@ from conductor.agents import (
     apollo_email_agent,
     answer_agent,
     apollo_email_task,
-    answer_email_task
+    answer_email_task,
 )
 from crewai import Crew
 

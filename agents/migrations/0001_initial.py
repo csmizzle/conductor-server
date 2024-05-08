@@ -4,20 +4,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='AgentRun',
+            name="AgentRun",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('task', models.CharField(max_length=100)),
-                ('agent_name', models.CharField(max_length=100)),
-                ('output', models.CharField(max_length=5000)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("task", models.CharField(max_length=100)),
+                ("agent_name", models.CharField(max_length=100)),
+                ("output", models.CharField(max_length=5000)),
             ],
         ),
     ]

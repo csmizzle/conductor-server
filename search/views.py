@@ -1,11 +1,11 @@
-from search.serializers import SearchInputSerializer, SearchOutputSerializer
+from search.serializers import SearchInputSerializer
 from rest_framework import views, status
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
 from conductor.retrievers.pinecone_ import (
-    create_gpt4_pinecone_apollo_retriever, 
+    create_gpt4_pinecone_apollo_retriever,
     create_gpt4_pinecone_discord_retriever,
 )
 from conductor.functions.pinecone_ import search_pinecone
@@ -17,8 +17,9 @@ discord_search = create_gpt4_pinecone_discord_retriever()
 
 class ApolloSearchView(views.APIView):
     """Search view for Apollo data"""
+
     permission_classes = [IsAuthenticated]
-    
+
     @swagger_auto_schema(request_body=SearchInputSerializer)
     def post(self, request: Request, *args, **kwargs) -> Response:
         """Get Apollo search results"""
@@ -30,6 +31,7 @@ class ApolloSearchView(views.APIView):
 
 class DiscordSearchView(views.APIView):
     """Search view for Discord data"""
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=SearchInputSerializer)
@@ -43,6 +45,7 @@ class DiscordSearchView(views.APIView):
 
 class PineconeSearchView(views.APIView):
     """Search view for Pinecone data"""
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=SearchInputSerializer)
