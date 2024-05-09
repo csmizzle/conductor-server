@@ -14,8 +14,9 @@ from agents import serializers, models
 
 class MarketEmailCrewViewSet(views.APIView):
     """View for taking market crew requests"""
+
     permission_classes = [IsAuthenticated]
-    
+
     @method_decorator(cache_page(60 * 60 * 2))
     def get(self, request, *args, **kwargs):
         data = models.AgentRun.objects.all()
@@ -44,8 +45,11 @@ class MarketEmailCrewViewSet(views.APIView):
             output=results,
         )
         run.save()
-        return Response({
-            "task": run.task,
-            "agent_name": run.agent_name,
-            "output": run.output,
-        }, status=status.HTTP_201_CREATED)
+        return Response(
+            {
+                "task": run.task,
+                "agent_name": run.agent_name,
+                "output": run.output,
+            },
+            status=status.HTTP_201_CREATED,
+        )

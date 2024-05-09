@@ -26,21 +26,33 @@ from drf_yasg import openapi
 schema_view = get_schema_view(
     openapi.Info(
         title="Conductor API",
-        default_version='v1',
-        description="Conductor API for managing agents and workflows"
-        ),
+        default_version="v1",
+        description="Conductor API for managing agents and workflows",
+    ),
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
 
 
 urlpatterns = [
-    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('admin/', admin.site.urls),
-    path('agents/', agent_views.MarketEmailCrewViewSet.as_view(), name='agents'),
-    path('search/apollo/', search_views.ApolloSearchView.as_view(), name='search_apollo'),
-    path('search/discord/', search_views.DiscordSearchView.as_view(), name='search_discord'),
-    path('search', search_views.PineconeSearchView.as_view(), name='search')
+    path(
+        "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+    ),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("admin/", admin.site.urls),
+    path("agents/", agent_views.MarketEmailCrewViewSet.as_view(), name="agents"),
+    path(
+        "search/apollo/", search_views.ApolloSearchView.as_view(), name="search_apollo"
+    ),
+    path(
+        "search/discord/",
+        search_views.DiscordSearchView.as_view(),
+        name="search_discord",
+    ),
+    path("search", search_views.PineconeSearchView.as_view(), name="search"),
 ]

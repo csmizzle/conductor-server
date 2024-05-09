@@ -10,15 +10,19 @@ client = Client()
 
 
 class GetAllAgentRunsTest(TestCase):
-    """ Test module for GET all agent runs API """
+    """Test module for GET all agent runs API"""
 
     def setUp(self):
-        AgentRun.objects.create(task='Test Task', agent_name='Test Agent', output='Test Output')
-        AgentRun.objects.create(task='Test Task 2', agent_name='Test Agent 2', output='Test Output 2')
+        AgentRun.objects.create(
+            task="Test Task", agent_name="Test Agent", output="Test Output"
+        )
+        AgentRun.objects.create(
+            task="Test Task 2", agent_name="Test Agent 2", output="Test Output 2"
+        )
 
     def test_get_all_agent_runs(self):
         # get API response
-        response = client.get(reverse('agents'))
+        response = client.get(reverse("agents"))
         # get data from db
         agent_runs = AgentRun.objects.all()
         serializer = AgentRunSerializer(agent_runs, many=True)
@@ -27,23 +31,22 @@ class GetAllAgentRunsTest(TestCase):
 
 
 class PostAgentRunTest(TestCase):
-
     def setUp(self) -> None:
         self.valid_payload = {
-            'task': 'Test Task',
-            'agent_name': 'Test Agent',
-            'output': 'Test Output'
+            "task": "Test Task",
+            "agent_name": "Test Agent",
+            "output": "Test Output",
         }
         self.invalid_payload = {
-            'task': None,
-            'agent_name': 'Test Agent',
-            'output': 'Test Output'
+            "task": None,
+            "agent_name": "Test Agent",
+            "output": "Test Output",
         }
 
     def test_create_valid_agent_run(self):
         response = client.post(
-            reverse('agents'),
+            reverse("agents"),
             data=json.dumps(self.valid_payload),
-            content_type='application/json'
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
