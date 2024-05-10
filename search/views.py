@@ -10,7 +10,6 @@ from conductor.retrievers.pinecone_ import (
 )
 from conductor.functions.pinecone_ import search_pinecone
 
-
 apollo_search = create_gpt4_pinecone_apollo_retriever()
 discord_search = create_gpt4_pinecone_discord_retriever()
 

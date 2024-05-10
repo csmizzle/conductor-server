@@ -1,7 +1,9 @@
-.env*
+*.env*
 .vscode
 *.db
 *.sqlite3
 *.json
 staticfiles
 *.pyc
+scratch
+.DS_Store

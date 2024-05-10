@@ -19,6 +19,7 @@ from rest_framework import permissions
 from django.urls import path
 from agents import views as agent_views
 from search import views as search_views
+from collect import views as collect_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -55,4 +56,9 @@ urlpatterns = [
         name="search_discord",
     ),
     path("search", search_views.PineconeSearchView.as_view(), name="search"),
+    path(
+        "collect/url/summarize/",
+        collect_views.SummarizeUrlsView.as_view(),
+        name="collect_summarize_urls",
+    ),
 ]

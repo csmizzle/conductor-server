@@ -148,8 +148,11 @@ CACHES = {
 
 
 STORAGES = {
-    # ...
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+
+CELERY_BROKER_URL = f"redis://{os.getenv('CELERY_URL')}:6379/0"
+CELERY_RESULT_BACKEND = f"redis://{os.getenv('CELERY_URL')}:6379/0"
