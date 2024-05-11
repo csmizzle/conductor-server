@@ -64,9 +64,4 @@ urlpatterns = [
         name="search_discord",
     ),
     path("search", search_views.PineconeSearchView.as_view(), name="search"),
-    # path(
-    #     "collect/url/summarize/",
-    #     collect_views.SummarizeUrlsView.as_view(),
-    #     name="collect_summarize_urls_post",
-    # ),
 ]
