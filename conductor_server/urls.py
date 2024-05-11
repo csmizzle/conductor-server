@@ -21,6 +21,7 @@ from django.urls import path, include
 from agents import views as agent_views
 from search import views as search_views
 from collect import views as collect_views
+from buckets import views as bucket_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -64,4 +65,13 @@ urlpatterns = [
         name="search_discord",
     ),
     path("search", search_views.PineconeSearchView.as_view(), name="search"),
+    path("buckets", bucket_views.BucketApi.as_view(), name="buckets"),
+    path(
+        "buckets/object/", bucket_views.BucketObjectApi.as_view(), name="buckets-object"
+    ),
+    path(
+        "buckets/object/latest/",
+        bucket_views.BucketObjectLatestView.as_view(),
+        name="buckets-object-latest",
+    ),
 ]

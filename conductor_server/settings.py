@@ -157,3 +157,11 @@ STORAGES = {
 
 CELERY_BROKER_URL = f"redis://{os.getenv('CELERY_URL')}:6379/0"
 CELERY_RESULT_BACKEND = f"redis://{os.getenv('CELERY_URL')}:6379/0"
+
+
+CONDUCTOR_BUCKETS = [
+    os.getenv("APOLLO_S3_BUCKET"),
+    os.getenv("CONDUCTOR_S3_BUCKET"),
+    os.getenv("APIFY_S3_BUCKET"),
+    os.getenv("DISCORD_S3_BUCKET"),
+]
