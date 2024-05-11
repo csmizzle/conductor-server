@@ -8,7 +8,7 @@ class CreateSummarizeUrlsSerializer(serializers.Serializer):
     urls = serializers.ListField(child=serializers.CharField(), required=True)
 
 
-class SummarySerializer(serializers.ModelSerializer):
+class URLSummarySerializer(serializers.ModelSerializer):
     """
     Serializer for URL summary.
     """

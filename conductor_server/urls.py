@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from rest_framework import permissions
-from django.urls import path
+from rest_framework import routers
+from django.urls import path, include
 from agents import views as agent_views
 from search import views as search_views
 from collect import views as collect_views
@@ -34,8 +35,15 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+router = routers.DefaultRouter()
+router.register(r"collect/tasks", collect_views.TaskViewSet, basename="task")
+router.register(
+    r"collect/url/summarize", collect_views.URLSummaryViewSet, basename="url-summary"
+)
+
 
 urlpatterns = [
+    path("", include(router.urls)),
     path(
         "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
     ),
@@ -56,9 +64,9 @@ urlpatterns = [
         name="search_discord",
     ),
     path("search", search_views.PineconeSearchView.as_view(), name="search"),
-    path(
-        "collect/url/summarize/",
-        collect_views.SummarizeUrlsView.as_view(),
-        name="collect_summarize_urls",
-    ),
+    # path(
+    #     "collect/url/summarize/",
+    #     collect_views.SummarizeUrlsView.as_view(),
+    #     name="collect_summarize_urls_post",
+    # ),
 ]
