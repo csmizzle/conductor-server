@@ -22,4 +22,4 @@ class PostSummarizeUrlsTest(TestCase):
         response = self.client.post(
             url, data=json.dumps(data), content_type="application/json"
         )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
