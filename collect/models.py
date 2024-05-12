@@ -27,7 +27,9 @@ class Task(models.Model):
 
 class URLSummary(models.Model):
     job_id = models.CharField(max_length=255)
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task_id = models.ForeignKey(
+        Task, on_delete=models.CASCADE, related_name="url_summary"
+    )
     url = models.CharField(max_length=255)
     content = models.TextField()
     summary = models.TextField()

@@ -23,6 +23,8 @@ class TaskSerializer(serializers.ModelSerializer):
     Serializer for Celery task.
     """
 
+    url_summary = URLSummarySerializer(many=True, read_only=True)
+
     class Meta:
         model = models.Task
         fields = "__all__"

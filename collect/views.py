@@ -60,8 +60,11 @@ class URLSummaryViewSet(ReadCreateModelViewSet):
             return serializers.CreateSummarizeUrlsSerializer
         return serializers.URLSummarySerializer
 
-    @swagger_auto_schema(request_body=serializers.CreateSummarizeUrlsSerializer)
-    def post(self, request, *args, **kwargs):
+    @swagger_auto_schema(
+        request_body=serializers.CreateSummarizeUrlsSerializer,
+        responses={status.HTTP_201_CREATED: serializers.TaskSerializer},
+    )
+    def create(self, request, *args, **kwargs):
         """Summarize URLs"""
         request_serializer = serializers.CreateSummarizeUrlsSerializer(
             data=request.data
