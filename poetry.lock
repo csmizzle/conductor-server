@@ -1383,7 +1383,7 @@ scrapy = "^2.11.1"
 type = "git"
 url = "https://github.com/csmizzle/conductor.git"
 reference = "HEAD"
-resolved_reference = "fb31deb2544b5506c2918534691ab9b99f44d22d"
+resolved_reference = "3fd62adc2857ce258d6bf5b5f9890231928b2edf"
 
 [[package]]
 name = "constantly"
