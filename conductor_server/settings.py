@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "agents",
     "search",
     "collect",
+    "chains",
 ]
 
 MIDDLEWARE = [

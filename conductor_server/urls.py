@@ -22,6 +22,7 @@ from agents import views as agent_views
 from search import views as search_views
 from collect import views as collect_views
 from buckets import views as bucket_views
+from chains import views as chains_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -37,9 +38,15 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register(r"collect/tasks", collect_views.TaskViewSet, basename="task")
+router.register(r"collect/tasks", collect_views.TaskViewSet, basename="collect-task")
 router.register(
     r"collect/url/summarize", collect_views.URLSummaryViewSet, basename="url-summary"
+)
+router.register(r"chains/tasks", chains_views.TaskViewSet, basename="chains-task")
+router.register(
+    r"chains/summarize",
+    chains_views.SummarizeContentViewSet,
+    basename="chains-summarize",
 )
 
 

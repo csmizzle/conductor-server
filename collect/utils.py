@@ -14,7 +14,7 @@ def run_url_summary_task(urls: list[str], task_id: str) -> None:
     task.status = models.TaskStatus.RUNNING
     task.save()
     try:
-        summaries = sync_summarize_urls(urls=urls, task_id=task_id, stop=False)
+        summaries = sync_summarize_urls(urls=urls, task_id=task_id)
         # serialize the data into URLSummary objects
         for summary in summaries:
             logging.info(f"Saving summary for {summary["job_id"]} ...")
