@@ -3,7 +3,8 @@ version: '3'
 services:
   server:
     container_name: conductor-server
-    image: conductor-server:local
+    image: conductor-server-base:latest
+    command: ["sh", "./start.sh"]
     env_file:
       - dev.env
     depends_on:
@@ -18,6 +19,17 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  server-celery:
+    container_name: conductor-server-celery
+    image: conductor-server-base:latest
+    command: ["sh", "./start_celery.sh"]
+    env_file:
+      - dev.env
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
   redis:
     container_name: conductor-redis
     image: redis:latest
