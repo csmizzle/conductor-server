@@ -9,7 +9,6 @@ RUN pip cache purge && pip install --no-cache-dir -r requirements.txt
 COPY ./conductor_server ./conductor_server
 COPY ./agents ./agents
 COPY ./search ./search
-COPY ./users ./users
 
 COPY ./buckets ./buckets
 COPY ./chains ./chains
