@@ -59,7 +59,8 @@ jobs:
           # be deployed to ECS.
           docker build -f Dockerfile.base -t $ECR_REPOSITORY/$CONTAINER_NAME:$IMAGE_TAG .
           docker push $ECR_REPOSITORY/$CONTAINER_NAME:$IMAGE_TAG
-          echo "image=$ECR_REPOSITORY/$CONTAINER_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -f Dockerfile.base -t $ECR_REPOSITORY/$CONTAINER_NAME:latest .
+          docker push $ECR_REPOSITORY/$CONTAINER_NAME:latest
 
       # - name: Fill in the new image ID in the Amazon ECS task definition
       #   id: task-def
