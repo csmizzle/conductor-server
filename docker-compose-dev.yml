@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  server:
+    container_name: conductor-server
+    image: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-server-base
+    command: ["sh", "./start.sh"]
+    env_file:
+      - dev.env
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    ports:
+      - 8000:8000
+    healthcheck:
+      test: ["CMD", "curl", "127.0.0.1:8000/swagger"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  server-celery:
+    container_name: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-server-base
+    image: conductor-server-base:latest
+    command: ["sh", "./start_celery.sh"]
+    env_file:
+      - dev.env
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+  redis:
+    container_name: conductor-redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - conductor_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  postgres:
+    container_name: conductor-postgres
+    env_file:
+      - dev.env
+    user: postgres
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - conductor_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+volumes:
+  conductor_redis_data:
+  conductor_postgres_data:

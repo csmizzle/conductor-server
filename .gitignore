@@ -7,3 +7,4 @@ staticfiles
 *.pyc
 scratch
 .DS_Store
+certs
