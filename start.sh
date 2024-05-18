@@ -4,8 +4,7 @@ echo "[!] Creating Conductor tables ..."
 python manage.py makemigrations && \
 python manage.py migrate
 
-if [ -z "$DJANGO_SUPERUSER_USERNAME" ] || [ -z "$DJANGO_SUPERUSER_EMAIL" ] || [ -z "$DJANGO_SUPERUSER_PASSWORD" ]
-then
+if [ -n "${DJANGO_SUPERUSER_USERNAME}" ]; then
     echo "[!] Superuser credentials provided, starting admin role creation ..."
     python manage.py ensure_adminuser --noinput
 else

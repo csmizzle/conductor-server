@@ -167,3 +167,7 @@ CONDUCTOR_BUCKETS = [
     os.getenv("APIFY_S3_BUCKET"),
     os.getenv("DISCORD_S3_BUCKET"),
 ]
+
+
+# disable swagger django login button
+SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
