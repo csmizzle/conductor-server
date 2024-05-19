@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import logfire
+from opentelemetry.instrumentation.django import DjangoInstrumentor
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -179,3 +182,8 @@ AWS_PROD_USERNAME_SECRET_STRING = os.getenv("AWS_PROD_USERNAME_SECRET_STRING")
 
 # disable swagger django login button
 SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
+
+# Logfire
+# Add the following lines at the end of the file
+logfire.configure()
+DjangoInstrumentor().instrument()
