@@ -4,7 +4,7 @@ services:
   server:
     container_name: conductor-server
     image: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-server-base:latest
-    command: ["sh", "./start.sh"]
+    command: ["sh", "./start.dev.sh"]
     env_file:
       - dev.env
     depends_on:
