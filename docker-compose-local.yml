@@ -4,7 +4,7 @@ services:
   server:
     container_name: conductor-server
     image: conductor-server-base:latest
-    command: ["sh", "./start.sh"]
+    command: ["sh", "./start.dev.sh"]
     env_file:
       - dev.env
     depends_on:
@@ -22,7 +22,7 @@ services:
   server-celery:
     container_name: conductor-server-celery
     image: conductor-server-base:latest
-    command: ["sh", "./start_celery.sh"]
+    command: ["sh", "./start.celery.sh"]
     env_file:
       - dev.env
     depends_on:

@@ -6,7 +6,7 @@ python manage.py migrate
 
 if [ -n "${DJANGO_SUPERUSER_EMAIL}" ]; then
     echo "[!] Superuser credentials provided, starting admin role creation ..."
-    python manage.py ensure_adminuser --noinput
+    python manage.py ensure_adminuser --noinput --prod
 else
     echo "[!] Superuser credentials not provided, skipping admin role creation ..."
 fi
