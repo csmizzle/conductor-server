@@ -156,11 +156,13 @@ STORAGES = {
 }
 
 
+# Celery settings
 CELERY_BROKER_URL = f"redis://{os.getenv('CELERY_URL')}:6379/0"
 CELERY_RESULT_BACKEND = f"redis://{os.getenv('CELERY_URL')}:6379/0"
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 1
 
 
+# Conductor buckets
 CONDUCTOR_BUCKETS = [
     os.getenv("APOLLO_S3_BUCKET"),
     os.getenv("CONDUCTOR_S3_BUCKET"),
