@@ -1,4 +1,8 @@
 echo "[!] Starting Conductor Server ..."
+
+echo "[!] Collecting static files ..."
+python manage.py collectstatic --noinput
+
 echo "[!] Creating Conductor tables ..."
 
 python manage.py makemigrations && \
