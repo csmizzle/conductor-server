@@ -16,13 +16,13 @@ django-redis = "^5.4.0"
 psycopg2-binary = "^2.9.9"
 gunicorn = "^22.0.0"
 whitenoise = "^6.6.0"
-crochet = "^2.1.1"
 logfire = {extras = ["celery", "django"], version = "^0.33.0"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
 pytest-django = "^4.8.0"
 pre-commit = "^3.7.0"
+conductor-discord = {git = "https://github.com/csmizzle/conductor-discord.git"}
 
 [build-system]
 requires = ["poetry-core"]

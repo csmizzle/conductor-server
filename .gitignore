@@ -8,3 +8,4 @@ staticfiles
 scratch
 .DS_Store
 certs
+*.code-workspace
