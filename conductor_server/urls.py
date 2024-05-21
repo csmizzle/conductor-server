@@ -71,8 +71,8 @@ urlpatterns = [
         search_views.DiscordSearchView.as_view(),
         name="search_discord",
     ),
-    path("search", search_views.PineconeSearchView.as_view(), name="search"),
-    path("buckets", bucket_views.BucketApi.as_view(), name="buckets"),
+    path("search/", search_views.PineconeSearchView.as_view(), name="search"),
+    path("buckets/", bucket_views.BucketApi.as_view(), name="buckets"),
     path(
         "buckets/object/", bucket_views.BucketObjectApi.as_view(), name="buckets-object"
     ),
