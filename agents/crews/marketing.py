@@ -17,7 +17,6 @@ market_email_crew = Crew(
         answer_email_task,
     ],
     verbose=True,
-    memory=True,
     cache=True,
     share_crew=False,
 )
