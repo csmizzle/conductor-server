@@ -25,7 +25,7 @@ class GetAllAgentRunsTest(TestCase):
 
     def test_get_all_agent_runs(self):
         # get API response
-        response = self.client.get(reverse("agents"))
+        response = self.client.get(reverse("teams_marketing"))
         # get data from db
         agent_runs = AgentRun.objects.all()
         serializer = AgentRunSerializer(agent_runs, many=True)
@@ -51,7 +51,7 @@ class PostAgentRunTest(TestCase):
 
     def test_create_valid_agent_run(self):
         response = self.client.post(
-            reverse("agents"),
+            reverse("teams_marketing"),
             data=json.dumps(self.valid_payload),
             content_type="application/json",
         )

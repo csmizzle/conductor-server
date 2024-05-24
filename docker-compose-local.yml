@@ -3,7 +3,7 @@ version: '3'
 services:
   server:
     container_name: conductor-server
-    image: conductor-server-base:latest
+    image: conductor-server:latest
     command: ["sh", "./start.dev.sh"]
     env_file:
       - local.env
@@ -21,7 +21,7 @@ services:
       retries: 5
   server-celery:
     container_name: conductor-server-celery
-    image: conductor-server-base:latest
+    image: conductor-server:latest
     command: ["sh", "./start.celery.sh"]
     env_file:
       - local.env

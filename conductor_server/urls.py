@@ -62,7 +62,11 @@ urlpatterns = [
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("admin/", admin.site.urls),
-    path("agents/", agent_views.MarketEmailCrewViewSet.as_view(), name="agents"),
+    path(
+        "teams/marketing/",
+        agent_views.MarketEmailCrewViewSet.as_view(),
+        name="teams_marketing",
+    ),
     path(
         "search/apollo/", search_views.ApolloSearchView.as_view(), name="search_apollo"
     ),
