@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "search",
     "collect",
     "chains",
+    "rest_framework_nested",
 ]
 
 MIDDLEWARE = [

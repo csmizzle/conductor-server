@@ -49,6 +49,21 @@ router.register(
     basename="chains-summarize",
 )
 
+router.register(
+    r"chains/apolloInput",
+    chains_views.ApolloInputChainView,
+    basename="chains-apollo-input",
+)
+router.register(
+    r"chains/apolloContext",
+    chains_views.ApolloContextChainView,
+    basename="chains-apollo-context",
+)
+router.register(
+    r"chains/emailFromContext",
+    chains_views.CreateEmailChainView,
+    basename="chains-email-from-context",
+)
 
 urlpatterns = [
     path("", include(router.urls)),

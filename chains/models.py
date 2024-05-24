@@ -3,6 +3,18 @@ from django.contrib.auth.models import User
 import uuid
 
 
+class ChainEvent(models.Model):
+    """
+    Chain text event model
+    """
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    chain_name = models.CharField(max_length=255)
+    input = models.TextField()
+    output = models.JSONField()
+
+
 class ChainTaskStatus(models.TextChoices):
     PENDING = "P", "Pending"
     RUNNING = "R", "Running"
