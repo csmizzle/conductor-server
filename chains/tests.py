@@ -14,7 +14,7 @@ class ApolloInputChainTest(TestCase):
 
     def test_create_valid_apollo_search(self):
         response = client.post(
-            reverse("chains-apollo-input-create"),
+            reverse("chains-apollo-input_create"),
             data=json.dumps(self.valid_payload),
             content_type="application/json",
         )
@@ -22,7 +22,7 @@ class ApolloInputChainTest(TestCase):
 
     def test_create_invalid_apollo_search(self):
         response = client.post(
-            reverse("chains-apollo-input-create"),
+            reverse("chains-apollo-input_create"),
             data=json.dumps(self.invalid_payload),
             content_type="application/json",
         )
