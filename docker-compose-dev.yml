@@ -66,6 +66,30 @@ services:
     env_file:
       - dev.env
     command: ["python", "/app/run_discord_bot.py"]
+  conductor-flows-agent:
+    env_file:
+      - dev.env
+    container_name: conductor-flows-agent
+    depends_on:
+      server:
+        condition: service_healthy
+    image: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-flows:latest
+    environment:
+      - PREFECT_API_URL=http://conductor-flows-server:4200/api
+      - PREFECT_UI_URL=http://conductor-flows-server:4200/api
+    restart: unless-stopped
+  conductor-flows-server:
+    env_file:
+      - dev.env
+    container_name: conductor-flows-server
+    depends_on:
+      server:
+        condition: service_healthy
+    image: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-flows:latest
+    ports:
+      - 4200:4200
+    restart: always
+    entrypoint: ["prefect", "server", "start"]
 
 volumes:
   conductor_redis_data:
