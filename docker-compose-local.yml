@@ -72,8 +72,10 @@ services:
       server:
         condition: service_healthy
     image: conductor-flows:latest
-    # environment:
-    #   - PREFECT_API_URL=http://localhost:4200/api
+    environment:
+      - PREFECT_API_URL=http://conductor-flows-server:4200/api
+      - PREFECT_UI_URL=http://conductor-flows-server:4200/api
+    restart: unless-stopped
   conductor-flows-server:
     container_name: conductor-flows-server
     depends_on:
