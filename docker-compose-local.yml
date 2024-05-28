@@ -67,6 +67,8 @@ services:
       - local.env
     command: ["python", "/app/run_discord_bot.py"]
   conductor-flows-agent:
+    env_file:
+      - local.env
     container_name: conductor-flows-agent
     depends_on:
       server:
@@ -77,6 +79,8 @@ services:
       - PREFECT_UI_URL=http://conductor-flows-server:4200/api
     restart: unless-stopped
   conductor-flows-server:
+    env_file:
+      - local.env
     container_name: conductor-flows-server
     depends_on:
       server:
@@ -86,10 +90,6 @@ services:
       - 4200:4200
     restart: always
     entrypoint: ["prefect", "server", "start"]
-    environment:
-      - PREFECT_SERVER_API_HOST=0.0.0.0
-      - PREFECT_UI_URL=http://localhost:4200/api
-      - PREFECT_API_URL=http://localhost:4200/api
 
 
 volumes:
