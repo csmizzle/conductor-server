@@ -23,6 +23,7 @@ from search import views as search_views
 from collect import views as collect_views
 from buckets import views as bucket_views
 from chains import views as chains_views
+from flows import views as flow_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -95,5 +96,10 @@ urlpatterns = [
         "buckets/object/latest/",
         bucket_views.BucketObjectLatestView.as_view(),
         name="buckets-object-latest",
+    ),
+    path(
+        "flows/<str:deployment_id>/",
+        flow_views.FlowRunApiView.as_view(),
+        name="flow-run",
     ),
 ]

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "collect",
     "chains",
     "rest_framework_nested",
+    "flows",
 ]
 
 MIDDLEWARE = [
@@ -183,6 +184,9 @@ AWS_PROD_USERNAME_SECRET_STRING = os.getenv("AWS_PROD_USERNAME_SECRET_STRING")
 
 # disable swagger django login button
 SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
+
+# PREFECT API URL
+PREFECT_API_URL = os.getenv("PREFECT_API_URL")
 
 # Logfire
 # Add the following lines at the end of the file
