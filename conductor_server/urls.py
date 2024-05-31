@@ -102,4 +102,10 @@ urlpatterns = [
         flow_views.FlowRunApiView.as_view(),
         name="flow-run",
     ),
+    path("flows/results/", flow_views.FlowResultView.as_view(), name="flow-result"),
+    path(
+        "flows/results/list/",
+        flow_views.FlowResultListView.as_view(),
+        name="flow-results-list",
+    ),
 ]
