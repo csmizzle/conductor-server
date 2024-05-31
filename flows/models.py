@@ -9,5 +9,7 @@ class FlowResult(models.Model):
 
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    context = models.JSONField()
+    prefect_id = models.CharField(max_length=255, null=True)
+    flow_id = models.CharField(max_length=255, null=True)
+    deployment_id = models.CharField(max_length=255, null=True)
     results = models.JSONField()

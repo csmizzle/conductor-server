@@ -6,6 +6,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
+from rest_framework import permissions
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -16,6 +17,8 @@ class FlowRunApiView(APIView):
     """
     Flow API for Conductor flows
     """
+
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         request_body=serializers.FlowRunSerializer,
@@ -40,6 +43,8 @@ class FlowRunApiView(APIView):
 
 
 class FlowResultListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request: Request) -> Response:
         """
         Get all flow results
@@ -55,18 +60,25 @@ class FlowResultView(APIView):
     Store the results of the flow run
     """
 
+    permission_classes = [permissions.IsAuthenticated]
+
     @swagger_auto_schema(
-        request_body=serializers.FlowResultSerializer,
+        request_body=serializers.FlowResultInputSerializer,
     )
     def post(self, request: Request) -> Response:
         """
         Store the results of a flow run
         """
+        input_serializer = serializers.FlowResultInputSerializer(data=request.data)
+        input_serializer.is_valid(raise_exception=True)
         result = models.FlowResult.objects.create(
-            user=request.user,
-            context=request.data["context"],
-            result=request.data["result"],
+            created_by=request.user,
+            prefect_id=input_serializer.validated_data["prefect_id"],
+            flow_id=input_serializer.validated_data["flow_id"],
+            deployment_id=input_serializer.validated_data["deployment_id"],
+            results=input_serializer.validated_data["results"],
         )
+        result.save()
         result_serializer = serializers.FlowResultSerializer(result)
-        # return the serialized run
+        # return the serialized result
         return Response(result_serializer.data, status=status.HTTP_201_CREATED)
