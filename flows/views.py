@@ -82,3 +82,22 @@ class FlowResultView(APIView):
         result_serializer = serializers.FlowResultSerializer(result)
         # return the serialized result
         return Response(result_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ReadFlowDeploymentsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=serializers.ReadDeploymentInputSerializer,
+    )
+    def post(self, request: Request) -> Response:
+        """
+        Get all flow deployments
+        """
+        return Response(
+            requests.post(
+                f"{settings.PREFECT_API_URL}/deployments/filter",
+                json=request.data,
+            ).json(),
+            status=status.HTTP_200_OK,
+        )

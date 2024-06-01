@@ -98,13 +98,18 @@ urlpatterns = [
         name="buckets-object-latest",
     ),
     path(
-        "flows/<str:deployment_id>/",
+        "flows/deployments/<str:deployment_id>/",
         flow_views.FlowRunApiView.as_view(),
-        name="flow-run",
+        name="flow-deployments-run",
     ),
-    path("results/", flow_views.FlowResultView.as_view(), name="flow-result"),
     path(
-        "results/list/",
+        "flows/deployments/",
+        flow_views.ReadFlowDeploymentsView.as_view(),
+        name="flow-deployments",
+    ),
+    path("flows/results/", flow_views.FlowResultView.as_view(), name="flow-result"),
+    path(
+        "flows/results/list/",
         flow_views.FlowResultListView.as_view(),
         name="flow-results-list",
     ),
