@@ -51,17 +51,17 @@ router.register(
 )
 
 router.register(
-    r"chains/apolloInput",
+    r"chains/apollo/input",
     chains_views.ApolloInputChainView,
     basename="chains-apollo-input",
 )
 router.register(
-    r"chains/apolloContext",
+    r"chains/apollo/context",
     chains_views.ApolloContextChainView,
     basename="chains-apollo-context",
 )
 router.register(
-    r"chains/emailFromContext",
+    r"chains/email/context",
     chains_views.CreateEmailChainView,
     basename="chains-email-from-context",
 )
