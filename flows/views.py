@@ -42,7 +42,11 @@ class FlowRunApiView(APIView):
         )
 
 
-class FlowResultListView(APIView):
+class FlowResultView(APIView):
+    """
+    Store the results of the flow run
+    """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: Request) -> Response:
@@ -53,14 +57,6 @@ class FlowResultListView(APIView):
             models.FlowResult.objects.all(), many=True
         )
         return Response(results.data, status=status.HTTP_200_OK)
-
-
-class FlowResultView(APIView):
-    """
-    Store the results of the flow run
-    """
-
-    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         request_body=serializers.FlowResultInputSerializer,
@@ -87,17 +83,13 @@ class FlowResultView(APIView):
 class ReadFlowDeploymentsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @swagger_auto_schema(
-        request_body=serializers.ReadDeploymentInputSerializer,
-    )
-    def post(self, request: Request) -> Response:
+    def get(self, request: Request) -> Response:
         """
         Get all flow deployments
         """
         return Response(
             requests.post(
                 f"{settings.PREFECT_API_URL}/deployments/filter",
-                json=request.data,
             ).json(),
             status=status.HTTP_200_OK,
         )

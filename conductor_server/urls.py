@@ -49,7 +49,6 @@ router.register(
     chains_views.SummarizeContentViewSet,
     basename="chains-summarize",
 )
-
 router.register(
     r"chains/apollo/input",
     chains_views.ApolloInputChainView,
@@ -100,17 +99,12 @@ urlpatterns = [
     path(
         "flows/deployments/<str:deployment_id>/",
         flow_views.FlowRunApiView.as_view(),
-        name="flow-deployments-run",
+        name="flow-deployments-create",
     ),
     path(
         "flows/deployments/",
         flow_views.ReadFlowDeploymentsView.as_view(),
-        name="flow-deployments",
+        name="flow-deployments-list",
     ),
-    path("flows/results/", flow_views.FlowResultView.as_view(), name="flow-result"),
-    path(
-        "flows/results/list/",
-        flow_views.FlowResultListView.as_view(),
-        name="flow-results-list",
-    ),
+    path("flows/results/", flow_views.FlowResultView.as_view(), name="flow-results"),
 ]

@@ -4,6 +4,7 @@ from flows import models
 
 class FlowRunSerializer(serializers.Serializer):
     name = serializers.CharField()
+    parameters = serializers.JSONField()
 
 
 class FlowResultInputSerializer(serializers.Serializer):
