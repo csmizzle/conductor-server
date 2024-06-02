@@ -9,8 +9,21 @@ from rest_framework import permissions, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework import viewsets
 from flows import models, serializers
+
+
+class FlowViewSet(viewsets.ModelViewSet):
+    """
+    Flow API for Conductor flows
+    """
+
+    queryset = models.Flow.objects.all()
+    serializer_class = serializers.FlowSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
 
 
 class FlowRunApiView(APIView):

@@ -1,6 +1,16 @@
 from rest_framework import serializers
-
 from flows import models
+
+
+class FlowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Flow
+        fields = ["prefect_id", "prefect_flow_id", "prefect_deployment_id"]
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        validated_data["created_by"] = user
+        return models.Flow.objects.create(**validated_data)
 
 
 class FlowRunSerializer(serializers.Serializer):

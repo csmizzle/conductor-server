@@ -42,6 +42,5 @@ class Summary(models.Model):
     task_id = models.ForeignKey(
         ChainTask, on_delete=models.CASCADE, related_name="summary"
     )
-
     content = models.TextField()
     summary = models.TextField()

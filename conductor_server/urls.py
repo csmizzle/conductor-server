@@ -75,6 +75,11 @@ router.register(
     report_views.ParagraphViewSet,
     basename="paragraphs",
 )
+router.register(
+    r"flows",
+    flow_views.FlowViewSet,
+    basename="flows",
+)
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -108,7 +113,7 @@ urlpatterns = [
         name="buckets-object-latest",
     ),
     path(
-        "flows/deployments/<str:deployment_id>/",
+        "flows/deployments/<str:deployment_id>/run",
         flow_views.FlowRunApiView.as_view(),
         name="flow-deployments-create",
     ),
