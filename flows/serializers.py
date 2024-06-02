@@ -18,11 +18,15 @@ class FlowRunSerializer(serializers.Serializer):
     parameters = serializers.JSONField()
 
 
-class FlowResultInputSerializer(serializers.Serializer):
-    prefect_id = serializers.CharField()
-    flow_id = serializers.CharField()
-    deployment_id = serializers.CharField()
-    results = serializers.JSONField()
+class FlowResultInputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.FlowResult
+        fields = ["flow", "results"]
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        validated_data["created_by"] = user
+        return models.FlowResult.objects.create(**validated_data)
 
 
 class FlowResultSerializer(serializers.ModelSerializer):
