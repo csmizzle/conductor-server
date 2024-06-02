@@ -1,9 +1,9 @@
 import os
-from celery import Celery
-import logfire
-from opentelemetry.instrumentation.celery import CeleryInstrumentor
-from celery.signals import worker_process_init
 
+import logfire
+from celery import Celery
+from celery.signals import worker_process_init
+from opentelemetry.instrumentation.celery import CeleryInstrumentor
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "conductor_server.settings")

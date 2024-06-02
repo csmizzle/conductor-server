@@ -1,10 +1,9 @@
-from rest_framework import viewsets, status, mixins
-from rest_framework.response import Response
-from collect import serializers
-from collect import models
-from collect.tasks import task_collect_summarize_urls
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import permissions
+from rest_framework import mixins, permissions, status, viewsets
+from rest_framework.response import Response
+
+from collect import models, serializers
+from collect.tasks import task_collect_summarize_urls
 
 
 class ReadCreateModelViewSet(

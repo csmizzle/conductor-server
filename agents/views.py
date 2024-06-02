@@ -3,13 +3,14 @@ Run, create, and manage agents
 """
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from rest_framework import views, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.request import Request
-from agents.crews.marketing import market_email_crew
 from drf_yasg.utils import swagger_auto_schema
-from agents import serializers, models
+from rest_framework import status, views
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+
+from agents import models, serializers
+from agents.crews.marketing import market_email_crew
 
 
 class MarketEmailCrewViewSet(views.APIView):

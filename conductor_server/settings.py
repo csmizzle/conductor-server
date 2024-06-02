@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 import logfire
 from opentelemetry.instrumentation.django import DjangoInstrumentor
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -183,7 +183,10 @@ AWS_PROD_USERNAME_SECRET_STRING = os.getenv("AWS_PROD_USERNAME_SECRET_STRING")
 
 
 # disable swagger django login button
-SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,
+    "DEFAULT_INFO": "conductor_server.urls.api_info",
+}
 
 # PREFECT API URL
 PREFECT_API_URL = os.getenv("PREFECT_API_URL")

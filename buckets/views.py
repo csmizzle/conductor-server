@@ -1,10 +1,11 @@
-from rest_framework import views, status, permissions
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-import boto3
 import json
+
+import boto3
 from django.conf import settings
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import permissions, status, views
+from rest_framework.response import Response
 
 
 class BucketApi(views.APIView):

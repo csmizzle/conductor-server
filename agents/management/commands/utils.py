@@ -1,7 +1,8 @@
-from typing import Union
-from django.conf import settings
-import boto3
 import json
+from typing import Union
+
+import boto3
+from django.conf import settings
 
 
 def get_prod_credentials() -> Union[dict, None]:

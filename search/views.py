@@ -1,14 +1,15 @@
-from search.serializers import SearchInputSerializer
-from rest_framework import views, status
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework.response import Response
-from rest_framework.request import Request
-from rest_framework.permissions import IsAuthenticated
+from conductor.functions.pinecone_ import search_pinecone
 from conductor.retrievers.pinecone_ import (
     create_gpt4_pinecone_apollo_retriever,
     create_gpt4_pinecone_discord_retriever,
 )
-from conductor.functions.pinecone_ import search_pinecone
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, views
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+
+from search.serializers import SearchInputSerializer
 
 apollo_search = create_gpt4_pinecone_apollo_retriever()
 discord_search = create_gpt4_pinecone_discord_retriever()

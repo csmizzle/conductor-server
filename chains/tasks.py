@@ -1,5 +1,6 @@
-from chains.utils import run_map_reduce_summarize
 from celery import shared_task
+
+from chains.utils import run_map_reduce_summarize
 
 
 @shared_task

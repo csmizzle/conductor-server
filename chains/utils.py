@@ -1,10 +1,11 @@
 """
 Utility functions for the collect module.
 """
-from conductor.chains import map_reduce_summarize
-from chains import models
 import logging
 
+from conductor.chains import map_reduce_summarize
+
+from chains import models
 
 logger = logging.getLogger(__name__)
 

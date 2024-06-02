@@ -1,0 +1,1177 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Conductor API",
+        "description": "Conductor API for managing agents and workflows",
+        "version": "v1"
+    },
+    "basePath": "/",
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "Basic": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "Basic": []
+        }
+    ],
+    "paths": {
+        "/agents/": {
+            "get": {
+                "operationId": "agents_list",
+                "description": "View for taking market crew requests",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "agents"
+                ]
+            },
+            "post": {
+                "operationId": "agents_create",
+                "description": "Send a request to the marketing team to email the crew",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/AgentInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/AgentInput"
+                        }
+                    }
+                },
+                "tags": [
+                    "agents"
+                ]
+            },
+            "parameters": []
+        },
+        "/buckets/": {
+            "get": {
+                "operationId": "buckets_list",
+                "description": "List contents of a bucket",
+                "parameters": [
+                    {
+                        "name": "bucket_name",
+                        "in": "query",
+                        "description": "Name of the bucket",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "apollo-person-search-raw-data",
+                            "conductor-jobs-dev",
+                            "apify-bucket-dev",
+                            "discord-bucket-dev"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "buckets"
+                ]
+            },
+            "parameters": []
+        },
+        "/buckets/object/": {
+            "get": {
+                "operationId": "buckets_object_list",
+                "description": "Get contents of a bucket object",
+                "parameters": [
+                    {
+                        "name": "bucket_name",
+                        "in": "query",
+                        "description": "Name of the bucket",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "apollo-person-search-raw-data",
+                            "conductor-jobs-dev",
+                            "apify-bucket-dev",
+                            "discord-bucket-dev"
+                        ]
+                    },
+                    {
+                        "name": "object_name",
+                        "in": "query",
+                        "description": "Name of the object",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "buckets"
+                ]
+            },
+            "parameters": []
+        },
+        "/buckets/object/latest/": {
+            "get": {
+                "operationId": "buckets_object_latest_list",
+                "description": "Get contents of a bucket object",
+                "parameters": [
+                    {
+                        "name": "bucket_name",
+                        "in": "query",
+                        "description": "Name of the bucket",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "apollo-person-search-raw-data",
+                            "conductor-jobs-dev",
+                            "apify-bucket-dev",
+                            "discord-bucket-dev"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "buckets"
+                ]
+            },
+            "parameters": []
+        },
+        "/chains/apollo/context/": {
+            "get": {
+                "operationId": "chains_apollo_context_list",
+                "description": "API endpoint that allows for Apollo context to be created",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ChainEvent"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "post": {
+                "operationId": "chains_apollo_context_create",
+                "description": "Create a new Apollo context",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ApolloContextInputChain"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ApolloContextInputChain"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": []
+        },
+        "/chains/apollo/context/{id}/": {
+            "get": {
+                "operationId": "chains_apollo_context_read",
+                "description": "API endpoint that allows for Apollo context to be created",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ChainEvent"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this chain event.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/chains/apollo/input/": {
+            "get": {
+                "operationId": "chains_apollo_input_list",
+                "description": "API endpoint that allows for Apollo inputs to be created",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ChainEvent"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "post": {
+                "operationId": "chains_apollo_input_create",
+                "description": "Create a new Apollo input",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateApolloInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CreateApolloInput"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": []
+        },
+        "/chains/apollo/input/{id}/": {
+            "get": {
+                "operationId": "chains_apollo_input_read",
+                "description": "API endpoint that allows for Apollo inputs to be created",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ChainEvent"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this chain event.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/chains/email/context/": {
+            "get": {
+                "operationId": "chains_email_context_list",
+                "description": "API endpoint that allows for Apollo context to be created",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ChainEvent"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "post": {
+                "operationId": "chains_email_context_create",
+                "description": "Create a new Apollo context",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/EmailFromContext"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/EmailFromContext"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": []
+        },
+        "/chains/email/context/{id}/": {
+            "get": {
+                "operationId": "chains_email_context_read",
+                "description": "API endpoint that allows for Apollo context to be created",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ChainEvent"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this chain event.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/chains/summarize/": {
+            "get": {
+                "operationId": "chains_summarize_list",
+                "description": "API endpoint that allows summaries to be created and retrieved.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ChainSummary"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "post": {
+                "operationId": "chains_summarize_create",
+                "description": "Create a new summary.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateChainSummarizeContent"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CreateChainSummarizeContent"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": []
+        },
+        "/chains/summarize/{id}/": {
+            "get": {
+                "operationId": "chains_summarize_read",
+                "description": "API endpoint that allows summaries to be created and retrieved.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ChainSummary"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "A unique integer value identifying this summary.",
+                    "required": true,
+                    "type": "integer"
+                }
+            ]
+        },
+        "/chains/tasks/": {
+            "get": {
+                "operationId": "chains_tasks_list",
+                "description": "Task view set",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ChainTask"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": []
+        },
+        "/chains/tasks/{task_id}/": {
+            "get": {
+                "operationId": "chains_tasks_read",
+                "description": "Task view set",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/ChainTask"
+                        }
+                    }
+                },
+                "tags": [
+                    "chains"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "task_id",
+                    "in": "path",
+                    "description": "A UUID string identifying this chain task.",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid"
+                }
+            ]
+        },
+        "/collect/tasks/": {
+            "get": {
+                "operationId": "collect_tasks_list",
+                "description": "Task view set",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Task"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "collect"
+                ]
+            },
+            "parameters": []
+        },
+        "/collect/tasks/{task_id}/": {
+            "get": {
+                "operationId": "collect_tasks_read",
+                "description": "Task view set",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    }
+                },
+                "tags": [
+                    "collect"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "task_id",
+                    "in": "path",
+                    "description": "A UUID string identifying this task.",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid"
+                }
+            ]
+        },
+        "/collect/url/summarize/": {
+            "get": {
+                "operationId": "collect_url_summarize_list",
+                "description": "URL summary view set",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "collect"
+                ]
+            },
+            "post": {
+                "operationId": "collect_url_summarize_create",
+                "description": "Summarize URLs",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateSummarizeUrls"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    }
+                },
+                "tags": [
+                    "collect"
+                ]
+            },
+            "parameters": []
+        },
+        "/collect/url/summarize/{job_id}/": {
+            "get": {
+                "operationId": "collect_url_summarize_read",
+                "description": "URL summary view set",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "collect"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "job_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/flows/deployments/": {
+            "get": {
+                "operationId": "flows_deployments_list",
+                "description": "Get all flow deployments",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "flows"
+                ]
+            },
+            "parameters": []
+        },
+        "/flows/deployments/{deployment_id}/": {
+            "post": {
+                "operationId": "flows_deployments_create",
+                "description": "Flow API for Conductor flows",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FlowRun"
+                        }
+                    },
+                    {
+                        "name": "deployment_id",
+                        "in": "path",
+                        "description": "The deployment ID of the flow to run",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/FlowRun"
+                        }
+                    }
+                },
+                "tags": [
+                    "flows"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "deployment_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/flows/results/": {
+            "get": {
+                "operationId": "flows_results_list",
+                "description": "Get all flow results",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "flows"
+                ]
+            },
+            "post": {
+                "operationId": "flows_results_create",
+                "description": "Store the results of a flow run",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FlowResultInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/FlowResultInput"
+                        }
+                    }
+                },
+                "tags": [
+                    "flows"
+                ]
+            },
+            "parameters": []
+        },
+        "/search/": {
+            "post": {
+                "operationId": "search_create",
+                "description": "Get Pinecone search results",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SearchInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/SearchInput"
+                        }
+                    }
+                },
+                "tags": [
+                    "search"
+                ]
+            },
+            "parameters": []
+        },
+        "/search/apollo/": {
+            "post": {
+                "operationId": "search_apollo_create",
+                "description": "Get Apollo search results",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SearchInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/SearchInput"
+                        }
+                    }
+                },
+                "tags": [
+                    "search"
+                ]
+            },
+            "parameters": []
+        },
+        "/search/discord/": {
+            "post": {
+                "operationId": "search_discord_create",
+                "description": "Get Discord search results",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SearchInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/SearchInput"
+                        }
+                    }
+                },
+                "tags": [
+                    "search"
+                ]
+            },
+            "parameters": []
+        }
+    },
+    "definitions": {
+        "AgentInput": {
+            "required": [
+                "task"
+            ],
+            "type": "object",
+            "properties": {
+                "task": {
+                    "title": "Task",
+                    "type": "string",
+                    "maxLength": 300,
+                    "minLength": 1
+                }
+            }
+        },
+        "ChainEvent": {
+            "required": [
+                "chain_name",
+                "input",
+                "output",
+                "created_by"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "created_at": {
+                    "title": "Created at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "chain_name": {
+                    "title": "Chain name",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "input": {
+                    "title": "Input",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "output": {
+                    "title": "Output",
+                    "type": "object"
+                },
+                "created_by": {
+                    "title": "Created by",
+                    "type": "integer"
+                }
+            }
+        },
+        "ApolloContextInputChain": {
+            "required": [
+                "person_titles",
+                "person_locations"
+            ],
+            "type": "object",
+            "properties": {
+                "person_titles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "person_locations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "CreateApolloInput": {
+            "required": [
+                "query"
+            ],
+            "type": "object",
+            "properties": {
+                "query": {
+                    "title": "Query",
+                    "type": "string",
+                    "maxLength": 5000,
+                    "minLength": 1
+                }
+            }
+        },
+        "EmailFromContext": {
+            "required": [
+                "tone",
+                "context",
+                "sign_off"
+            ],
+            "type": "object",
+            "properties": {
+                "tone": {
+                    "title": "Tone",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "context": {
+                    "title": "Context",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sign_off": {
+                    "title": "Sign off",
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "ChainSummary": {
+            "required": [
+                "content",
+                "summary",
+                "task_id"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "content": {
+                    "title": "Content",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "summary": {
+                    "title": "Summary",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "task_id": {
+                    "title": "Task id",
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "CreateChainSummarizeContent": {
+            "required": [
+                "content"
+            ],
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "ChainTask": {
+            "required": [
+                "created_by"
+            ],
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "title": "Task id",
+                    "type": "string",
+                    "format": "uuid",
+                    "readOnly": true
+                },
+                "summary": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ChainSummary"
+                    },
+                    "readOnly": true
+                },
+                "created_at": {
+                    "title": "Created at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "status": {
+                    "title": "Status",
+                    "type": "string",
+                    "enum": [
+                        "P",
+                        "R",
+                        "C",
+                        "F"
+                    ],
+                    "readOnly": true
+                },
+                "created_by": {
+                    "title": "Created by",
+                    "type": "integer"
+                }
+            }
+        },
+        "URLSummary": {
+            "required": [
+                "job_id",
+                "url",
+                "content",
+                "summary",
+                "task_id"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "job_id": {
+                    "title": "Job id",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "url": {
+                    "title": "Url",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "content": {
+                    "title": "Content",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "summary": {
+                    "title": "Summary",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "task_id": {
+                    "title": "Task id",
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "Task": {
+            "required": [
+                "created_by"
+            ],
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "title": "Task id",
+                    "type": "string",
+                    "format": "uuid",
+                    "readOnly": true
+                },
+                "url_summary": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/URLSummary"
+                    },
+                    "readOnly": true
+                },
+                "created_at": {
+                    "title": "Created at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "status": {
+                    "title": "Status",
+                    "type": "string",
+                    "enum": [
+                        "P",
+                        "R",
+                        "C",
+                        "F"
+                    ],
+                    "readOnly": true
+                },
+                "created_by": {
+                    "title": "Created by",
+                    "type": "integer"
+                }
+            }
+        },
+        "CreateSummarizeUrls": {
+            "required": [
+                "urls"
+            ],
+            "type": "object",
+            "properties": {
+                "urls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "FlowRun": {
+            "required": [
+                "name",
+                "parameters"
+            ],
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Name",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "parameters": {
+                    "title": "Parameters",
+                    "type": "object"
+                }
+            }
+        },
+        "FlowResultInput": {
+            "required": [
+                "prefect_id",
+                "flow_id",
+                "deployment_id",
+                "results"
+            ],
+            "type": "object",
+            "properties": {
+                "prefect_id": {
+                    "title": "Prefect id",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "flow_id": {
+                    "title": "Flow id",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "deployment_id": {
+                    "title": "Deployment id",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "results": {
+                    "title": "Results",
+                    "type": "object"
+                }
+            }
+        },
+        "SearchInput": {
+            "required": [
+                "query"
+            ],
+            "type": "object",
+            "properties": {
+                "query": {
+                    "title": "Query",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                }
+            }
+        }
+    }
+}

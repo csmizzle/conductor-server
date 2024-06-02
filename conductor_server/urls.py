@@ -15,25 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from rest_framework import permissions
-from rest_framework import routers
-from django.urls import path, include
+from django.urls import include, path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions, routers
+
 from agents import views as agent_views
-from search import views as search_views
-from collect import views as collect_views
 from buckets import views as bucket_views
 from chains import views as chains_views
+from collect import views as collect_views
 from flows import views as flow_views
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+from search import views as search_views
 
+api_info = openapi.Info(
+    title="Conductor API",
+    default_version="v1",
+    description="Conductor API for managing agents and workflows",
+)
 
 schema_view = get_schema_view(
-    openapi.Info(
-        title="Conductor API",
-        default_version="v1",
-        description="Conductor API for managing agents and workflows",
-    ),
     public=True,
     permission_classes=(permissions.AllowAny,),
 )

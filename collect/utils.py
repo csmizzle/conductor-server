@@ -1,9 +1,11 @@
 """
 Utility functions for the collect module.
 """
-from conductor.functions.apify_ import sync_summarize_urls
-from collect import models
 import logging
+
+from conductor.functions.apify_ import sync_summarize_urls
+
+from collect import models
 
 logger = logging.getLogger(__name__)
 
