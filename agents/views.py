@@ -20,7 +20,7 @@ class MarketEmailCrewViewSet(views.APIView):
 
     @method_decorator(cache_page(60 * 60 * 2))
     def get(self, request, *args, **kwargs):
-        data = models.AgentRun.objects.all()
+        data = models.AgentRun.objects.all().filter(created_by=request.user)
         serialized_runs = serializers.AgentRunSerializer(data, many=True)
         return Response(
             serialized_runs.data,

@@ -25,9 +25,11 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.ChainTaskSerializer
-    queryset = models.ChainTask.objects.all()
     lookup_field = "task_id"
     lookup_url_kwarg = "task_id"
+
+    def get_queryset(self):
+        return models.ChainTask.objects.filter(created_by=self.request.user)
 
 
 class SummarizeContentViewSet(ReadCreateModelViewSet):
@@ -37,8 +39,10 @@ class SummarizeContentViewSet(ReadCreateModelViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.ChainSummarySerializer
-    queryset = models.Summary.objects.all()
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return models.Summary.objects.filter(created_by=self.request.user)
 
     @swagger_auto_schema(
         request_body=serializers.CreateChainSummarizeContentSerializer,
@@ -67,9 +71,12 @@ class ApolloInputChainView(ReadCreateModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.ChainEventSerializer
     queryset = models.ChainEvent.objects.all().filter(
-        chain_name=chains.create_apollo_input_structured.__name__
+        chain_name=chains.create_apollo_input_structured.__name__,
     )
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
 
     @swagger_auto_schema(
         request_body=serializers.CreateApolloInputSerializer,
@@ -107,6 +114,9 @@ class ApolloContextChainView(ReadCreateModelViewSet):
         chain_name=apollo.generate_apollo_person_search_context.__name__
     )
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
 
     @swagger_auto_schema(
         request_body=serializers.ApolloContextInputChain,
@@ -154,6 +164,9 @@ class CreateEmailChainView(ReadCreateModelViewSet):
         chain_name=chains.create_email_from_context_structured.__name__
     )
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
 
     @swagger_auto_schema(
         request_body=serializers.EmailFromContextSerializer,

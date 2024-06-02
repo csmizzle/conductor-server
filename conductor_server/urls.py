@@ -26,6 +26,7 @@ from chains import views as chains_views
 from collect import views as collect_views
 from flows import views as flow_views
 from search import views as search_views
+from reports import views as report_views
 
 api_info = openapi.Info(
     title="Conductor API",
@@ -63,6 +64,16 @@ router.register(
     r"chains/email/context",
     chains_views.CreateEmailChainView,
     basename="chains-email-from-context",
+)
+router.register(
+    r"reports",
+    report_views.ReportViewSet,
+    basename="reports",
+)
+router.register(
+    r"reports/paragraphs",
+    report_views.ParagraphViewSet,
+    basename="paragraphs",
 )
 
 urlpatterns = [

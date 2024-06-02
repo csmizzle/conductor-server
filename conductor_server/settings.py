@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "chains",
     "rest_framework_nested",
     "flows",
+    "reports",
 ]
 
 MIDDLEWARE = [

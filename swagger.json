@@ -451,9 +451,8 @@
                 {
                     "name": "id",
                     "in": "path",
-                    "description": "A unique integer value identifying this summary.",
                     "required": true,
-                    "type": "integer"
+                    "type": "string"
                 }
             ]
         },
@@ -500,10 +499,8 @@
                 {
                     "name": "task_id",
                     "in": "path",
-                    "description": "A UUID string identifying this chain task.",
                     "required": true,
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "string"
                 }
             ]
         },
@@ -719,6 +716,278 @@
                 ]
             },
             "parameters": []
+        },
+        "/reports/": {
+            "get": {
+                "operationId": "reports_list",
+                "description": "API endpoint that allows reports to be viewed or edited.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Report"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "post": {
+                "operationId": "reports_create",
+                "description": "API endpoint that allows reports to be viewed or edited.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "parameters": []
+        },
+        "/reports/paragraphs/": {
+            "get": {
+                "operationId": "reports_paragraphs_list",
+                "description": "API endpoint that allows paragraphs to be viewed or edited.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Paragraph"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "post": {
+                "operationId": "reports_paragraphs_create",
+                "description": "API endpoint that allows paragraphs to be viewed or edited.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "parameters": []
+        },
+        "/reports/paragraphs/{id}/": {
+            "get": {
+                "operationId": "reports_paragraphs_read",
+                "description": "API endpoint that allows paragraphs to be viewed or edited.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "put": {
+                "operationId": "reports_paragraphs_update",
+                "description": "API endpoint that allows paragraphs to be viewed or edited.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "patch": {
+                "operationId": "reports_paragraphs_partial_update",
+                "description": "API endpoint that allows paragraphs to be viewed or edited.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Paragraph"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "delete": {
+                "operationId": "reports_paragraphs_delete",
+                "description": "API endpoint that allows paragraphs to be viewed or edited.",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/reports/{id}/": {
+            "get": {
+                "operationId": "reports_read",
+                "description": "API endpoint that allows reports to be viewed or edited.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "put": {
+                "operationId": "reports_update",
+                "description": "API endpoint that allows reports to be viewed or edited.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "patch": {
+                "operationId": "reports_partial_update",
+                "description": "API endpoint that allows reports to be viewed or edited.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Report"
+                        }
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "delete": {
+                "operationId": "reports_delete",
+                "description": "API endpoint that allows reports to be viewed or edited.",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "reports"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
         },
         "/search/": {
             "post": {
@@ -1156,6 +1425,53 @@
                 "results": {
                     "title": "Results",
                     "type": "object"
+                }
+            }
+        },
+        "Paragraph": {
+            "required": [
+                "title",
+                "content"
+            ],
+            "type": "object",
+            "properties": {
+                "title": {
+                    "title": "Title",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "content": {
+                    "title": "Content",
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "Report": {
+            "required": [
+                "title",
+                "description",
+                "paragraphs"
+            ],
+            "type": "object",
+            "properties": {
+                "title": {
+                    "title": "Title",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "description": {
+                    "title": "Description",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "paragraphs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Paragraph"
+                    }
                 }
             }
         },

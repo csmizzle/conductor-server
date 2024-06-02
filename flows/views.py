@@ -20,6 +20,9 @@ class FlowRunApiView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
+
     @swagger_auto_schema(
         request_body=serializers.FlowRunSerializer,
         manual_parameters=[
@@ -54,7 +57,7 @@ class FlowResultView(APIView):
         Get all flow results
         """
         results = serializers.FlowResultSerializer(
-            models.FlowResult.objects.all(), many=True
+            models.FlowResult.objects.all(), filter(created_by=request.user), many=True
         )
         return Response(results.data, status=status.HTTP_200_OK)
 

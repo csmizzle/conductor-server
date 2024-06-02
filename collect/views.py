@@ -24,6 +24,9 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "task_id"
     lookup_url_kwarg = "task_id"
 
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
+
 
 class URLSummaryViewSet(ReadCreateModelViewSet):
     """URL summary view set"""
@@ -33,6 +36,9 @@ class URLSummaryViewSet(ReadCreateModelViewSet):
     queryset = models.URLSummary.objects.all()
     lookup_field = "job_id"
     lookup_url_kwarg = "job_id"
+
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == "POST":
