@@ -6,7 +6,14 @@ from chains import models
 class CreateChainSummarizeContentSerializer(serializers.Serializer):
     """Serializer for summarizing URLs"""
 
-    content = serializers.ListField(child=serializers.CharField(), required=True)
+    content = serializers.ListField(
+        child=serializers.CharField(),
+        required=True,
+        help_text="List of URLs to summarize",
+    )
+    flow_id = serializers.IntegerField(
+        required=False, help_text="ID of the flow to attach the event to"
+    )
 
 
 class ChainSummarySerializer(serializers.ModelSerializer):
@@ -19,22 +26,12 @@ class ChainSummarySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ChainTaskSerializer(serializers.ModelSerializer):
-    """
-    Serializer for Celery task.
-    """
-
-    summary = ChainSummarySerializer(many=True, read_only=True)
-
-    class Meta:
-        model = models.ChainTask
-        fields = "__all__"
-        read_only_fields = ("task_id", "created_at", "status")
-
-
 class CreateApolloInputSerializer(serializers.Serializer):
     """Serializer for Apollo input"""
 
+    flow_id = serializers.IntegerField(
+        required=False, help_text="ID of the flow to attach the event to"
+    )
     query = serializers.CharField(required=True, max_length=5000)
 
 
@@ -48,9 +45,26 @@ class ChainEventSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ChainTaskSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Celery task.
+    """
+
+    event = ChainEventSerializer(read_only=True)
+    summary = ChainSummarySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.ChainTask
+        fields = "__all__"
+        read_only_fields = ("task_id", "created_at", "status")
+
+
 class ApolloContextInputChain(serializers.Serializer):
     """Serializer for Apollo context input"""
 
+    flow_id = serializers.IntegerField(
+        required=False, help_text="ID of the flow to attach the event to"
+    )
     person_titles = serializers.ListField(child=serializers.CharField(), required=True)
     person_locations = serializers.ListField(
         child=serializers.CharField(), required=True
@@ -60,6 +74,9 @@ class ApolloContextInputChain(serializers.Serializer):
 class EmailFromContextSerializer(serializers.Serializer):
     """Serializer for creating email from context"""
 
+    flow_id = serializers.IntegerField(
+        required=False, help_text="ID of the flow to attach the event to"
+    )
     tone = serializers.CharField(required=True)
     context = serializers.CharField(required=True)
     sign_off = serializers.CharField(required=True)

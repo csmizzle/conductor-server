@@ -1,13 +1,12 @@
 import json
-
 from conductor import chains
 from conductor.functions import apollo
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from chains import models, serializers
+from flows import models as flow_models
 from chains.tasks import run_summary_task
 
 
@@ -51,13 +50,27 @@ class SummarizeContentViewSet(ReadCreateModelViewSet):
         """
         Create a new summary.
         """
+        flow = None
         request_serializer = serializers.CreateChainSummarizeContentSerializer(
             data=request.data
         )
         request_serializer.is_valid(raise_exception=True)
+        if request_serializer.validated_data.get("flow_id"):
+            flow = flow_models.Flow.objects.get(
+                id=request_serializer.validated_data.get("flow_id"),
+                created_by=request.user,
+            )
+        event = models.ChainEvent.objects.create(
+            flow=flow,
+            created_by=request.user,
+            chain_name=chains.map_reduce_summarize.__name__,
+            input=json.dumps(request_serializer.validated_data),
+        )
         task = models.ChainTask.objects.create(created_by=request.user)
         run_summary_task.delay(
-            task_id=task.task_id, content=request_serializer.validated_data["content"]
+            event_id=event.id,
+            task_id=task.task_id,
+            content=request_serializer.validated_data["content"],
         )
         task_serializer = serializers.ChainTaskSerializer(task)
         return Response(task_serializer.data, status=status.HTTP_201_CREATED)
@@ -85,13 +98,20 @@ class ApolloInputChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo input
         """
+        flow = None
         request_serializer = serializers.CreateApolloInputSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
+        if request_serializer.validated_data.get("flow_id"):
+            flow = flow_models.Flow.objects.get(
+                id=request_serializer.validated_data.get("flow_id"),
+                created_by=request.user,
+            )
         apollo_input = chains.create_apollo_input_structured(
             query=request_serializer.validated_data["query"]
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
+                "flow": flow.id if flow else None,
                 "created_by": request.user.id,
                 "chain_name": chains.create_apollo_input_structured.__name__,
                 "input": request_serializer.validated_data["query"],
@@ -125,14 +145,21 @@ class ApolloContextChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo context
         """
+        flow = None
         request_serializer = serializers.ApolloContextInputChain(data=request.data)
         request_serializer.is_valid(raise_exception=True)
+        if request_serializer.validated_data.get("flow_id"):
+            flow = flow_models.Flow.objects.get(
+                id=request_serializer.validated_data.get("flow_id"),
+                created_by=request.user,
+            )
         apollo_context = apollo.generate_apollo_person_search_context(
             person_titles=request_serializer.validated_data["person_titles"],
             person_locations=request_serializer.validated_data["person_locations"],
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
+                "flow": flow.id if flow else None,
                 "created_by": request.user.id,
                 "chain_name": apollo.generate_apollo_person_search_context.__name__,
                 "input": json.dumps(
@@ -175,8 +202,14 @@ class CreateEmailChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo context
         """
+        flow = None
         request_serializer = serializers.EmailFromContextSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
+        if request_serializer.validated_data.get("flow_id"):
+            flow = flow_models.Flow.objects.get(
+                id=request_serializer.validated_data.get("flow_id"),
+                created_by=request.user,
+            )
         email_from_context = chains.create_email_from_context(
             tone=request_serializer.validated_data["tone"],
             context=request_serializer.validated_data["context"],
@@ -184,6 +217,7 @@ class CreateEmailChainView(ReadCreateModelViewSet):
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
+                "flow": flow.id if flow else None,
                 "created_by": request.user.id,
                 "chain_name": chains.create_email_from_context_structured.__name__,
                 "input": json.dumps(

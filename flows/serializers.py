@@ -5,7 +5,7 @@ from flows import models
 class FlowSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Flow
-        fields = ["prefect_id", "prefect_flow_id", "prefect_deployment_id"]
+        fields = ["id", "prefect_id", "prefect_flow_id", "prefect_deployment_id"]
 
     def create(self, validated_data):
         user = self.context["request"].user
