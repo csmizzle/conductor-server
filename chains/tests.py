@@ -1,12 +1,10 @@
 import json
 
 from django.contrib.auth.models import User
-from django.test import Client, TestCase
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-
-client = Client()
 
 
 class ApolloInputChainTest(TestCase):
@@ -23,7 +21,6 @@ class ApolloInputChainTest(TestCase):
             data=json.dumps(self.valid_payload),
             content_type="application/json",
         )
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_invalid_apollo_search(self):
@@ -55,7 +52,6 @@ class ApolloInputFlowChainTest(TestCase):
             data=json.dumps(self.flow_payload),
             content_type="application/json",
         )
-        print(response.json())
         # attach query to flow
         self.query_payload["flow_id"] = response.json()["id"]
         response = self.client.post(
@@ -63,5 +59,4 @@ class ApolloInputFlowChainTest(TestCase):
             data=json.dumps(self.query_payload),
             content_type="application/json",
         )
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
