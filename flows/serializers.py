@@ -2,37 +2,36 @@ from rest_framework import serializers
 from flows import models
 
 
-class FlowSerializer(serializers.ModelSerializer):
+class FlowTraceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Flow
-        fields = ["id", "prefect_id", "prefect_flow_id", "prefect_deployment_id"]
+        model = models.FlowTrace
+        fields = [
+            "id",
+            "prefect_flow_id",
+            "prefect_deployment_id",
+            "prefect_name",
+            "prefect_parameters",
+        ]
 
     def create(self, validated_data):
         user = self.context["request"].user
         validated_data["created_by"] = user
-        return models.Flow.objects.create(**validated_data)
+        return models.FlowTrace.objects.create(**validated_data)
 
 
 class FlowRunSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    parameters = serializers.JSONField()
-
-
-class FlowResultInputSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.FlowResult
-        fields = ["flow", "results"]
-
-    def create(self, validated_data):
-        user = self.context["request"].user
-        validated_data["created_by"] = user
-        return models.FlowResult.objects.create(**validated_data)
+    flow_trace = serializers.IntegerField(required=True)
 
 
 class FlowResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.FlowResult
-        fields = "__all__"
+        fields = ["flow_trace", "results"]
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        validated_data["created_by"] = user
+        return models.FlowResult.objects.create(**validated_data)
 
 
 class FlowFilterSerializer(serializers.Serializer):

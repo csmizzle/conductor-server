@@ -19,7 +19,6 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
-
 from agents import views as agent_views
 from buckets import views as bucket_views
 from chains import views as chains_views
@@ -77,7 +76,7 @@ router.register(
 )
 router.register(
     r"flows",
-    flow_views.FlowViewSet,
+    flow_views.FlowTraceViewSet,
     basename="flows",
 )
 
@@ -113,14 +112,14 @@ urlpatterns = [
         name="buckets-object-latest",
     ),
     path(
-        "flows/deployments/<str:deployment_id>/run",
-        flow_views.FlowRunApiView.as_view(),
-        name="flow-deployments-create",
-    ),
-    path(
-        "flows/deployments/",
+        "deployments/",
         flow_views.ReadFlowDeploymentsView.as_view(),
         name="flow-deployments-list",
     ),
-    path("flows/results/", flow_views.FlowResultView.as_view(), name="flow-results"),
+    path(
+        "deployments/<int:flow_trace>/run",
+        flow_views.FlowRunApiView.as_view(),
+        name="flow-deployments-create",
+    ),
+    path("results/", flow_views.FlowResultView.as_view(), name="flow-results"),
 ]

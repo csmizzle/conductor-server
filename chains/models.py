@@ -1,7 +1,7 @@
 import uuid
 from django.contrib.auth.models import User
 from django.db import models
-from flows.models import Flow
+from flows import models as flow_models
 
 
 class ChainEvent(models.Model):
@@ -9,7 +9,9 @@ class ChainEvent(models.Model):
     Chain text event model
     """
 
-    flow = models.ForeignKey(Flow, on_delete=models.CASCADE, null=True, default=None)
+    flow_trace = models.ForeignKey(
+        flow_models.FlowTrace, on_delete=models.CASCADE, null=True, default=None
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     chain_name = models.CharField(max_length=255)

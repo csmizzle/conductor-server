@@ -13,13 +13,13 @@ from rest_framework import viewsets
 from flows import models, serializers
 
 
-class FlowViewSet(viewsets.ModelViewSet):
+class FlowTraceViewSet(viewsets.ModelViewSet):
     """
     Create and list flows for execution in Prefect
     """
 
-    queryset = models.Flow.objects.all()
-    serializer_class = serializers.FlowSerializer
+    queryset = models.FlowTrace.objects.all()
+    serializer_class = serializers.FlowTraceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -37,27 +37,31 @@ class FlowRunApiView(APIView):
         return super().get_queryset().filter(created_by=self.request.user)
 
     @swagger_auto_schema(
-        request_body=serializers.FlowRunSerializer,
         manual_parameters=[
             openapi.Parameter(
-                name="flow_id",
+                name="flow_trace",
                 in_=openapi.IN_PATH,
                 type=openapi.TYPE_STRING,
-                description="The deployment ID of the flow to run",
+                description="The deployment ID of the flow trace to run",
                 required=True,
             ),
         ],
     )
-    def post(self, request: Request, flow_id: str) -> Response:
+    def post(self, request: Request, flow_trace: str) -> Response:
         flow = (
-            models.Flow.objects.all()
-            .filter(created_by=request.user, prefect_flow_id=flow_id)
+            models.FlowTrace.objects.all()
+            .filter(created_by=request.user, id=flow_trace)
             .first()
         )
         if flow:
             created_deployment = requests.post(
                 f"{settings.PREFECT_API_URL}/deployments/{flow.prefect_deployment_id}/create_flow_run",
-                json=request.data,
+                json={
+                    "name": flow.prefect_name,
+                    "parameters": flow.prefect_parameters
+                    if flow.prefect_parameters
+                    else {},
+                },
             )
             if created_deployment.ok:
                 return Response(
@@ -93,23 +97,23 @@ class FlowResultView(APIView):
         return Response(results.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        request_body=serializers.FlowResultInputSerializer,
+        request_body=serializers.FlowResultSerializer,
     )
     def post(self, request: Request) -> Response:
         """
         Store the results of a flow run
         """
-        input_serializer = serializers.FlowResultInputSerializer(data=request.data)
+        input_serializer = serializers.FlowResultSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
-        flow = (
-            models.Flow.objects.all()
-            .filter(id=input_serializer.validated_data["flow_id"])
+        flow_trace = (
+            models.FlowTrace.objects.all()
+            .filter(id=input_serializer.validated_data["flow_trace"].id)
             .first()
         )
-        if flow:
+        if flow_trace:
             result = models.FlowResult.objects.create(
                 created_by=request.user,
-                flow=input_serializer.validated_data["flow_id"],
+                flow_trace=input_serializer.validated_data["flow_trace"],
                 results=input_serializer.validated_data["results"],
             )
             result.save()
