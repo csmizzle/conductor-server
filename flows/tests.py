@@ -136,6 +136,7 @@ class ApolloMarketResearchFlowTest(TestCase):
             "prefect_flow_id": test_flow["flow_id"],
             "prefect_deployment_id": test_flow["id"],
             "prefect_name": self.flow_name,
+            "prefect_parameters": {"query": self.query},
         }
         # create flow trace
         created_flow_trace = self.client.post(
