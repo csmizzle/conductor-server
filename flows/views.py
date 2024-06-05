@@ -54,13 +54,15 @@ class FlowRunApiView(APIView):
             .first()
         )
         if flow:
+            input_parameters = (
+                flow.prefect_parameters if flow.prefect_parameters else {}
+            )
+            input_parameters["flow_trace"] = flow.id
             created_deployment = requests.post(
                 f"{settings.PREFECT_API_URL}/deployments/{flow.prefect_deployment_id}/create_flow_run",
                 json={
                     "name": flow.prefect_name,
-                    "parameters": flow.prefect_parameters
-                    if flow.prefect_parameters
-                    else {},
+                    "parameters": input_parameters,
                 },
             )
             if created_deployment.ok:

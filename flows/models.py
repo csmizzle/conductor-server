@@ -22,5 +22,7 @@ class FlowResult(models.Model):
 
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    flow_trace = models.ForeignKey(FlowTrace, on_delete=models.CASCADE)
+    flow_trace = models.ForeignKey(
+        FlowTrace, on_delete=models.CASCADE, related_name="results"
+    )
     results = models.JSONField()

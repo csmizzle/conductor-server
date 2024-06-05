@@ -10,7 +10,11 @@ class ChainEvent(models.Model):
     """
 
     flow_trace = models.ForeignKey(
-        flow_models.FlowTrace, on_delete=models.CASCADE, null=True, default=None
+        flow_models.FlowTrace,
+        related_name="events",
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)

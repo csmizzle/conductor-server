@@ -3,26 +3,6 @@ from flows import models
 from chains import serializers as chains_serializers
 
 
-class FlowTraceSerializer(serializers.ModelSerializer):
-    events = chains_serializers.ChainEventSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = models.FlowTrace
-        fields = [
-            "id",
-            "prefect_flow_id",
-            "prefect_deployment_id",
-            "prefect_name",
-            "prefect_parameters",
-            "events",
-        ]
-
-    def create(self, validated_data):
-        user = self.context["request"].user
-        validated_data["created_by"] = user
-        return models.FlowTrace.objects.create(**validated_data)
-
-
 class FlowRunSerializer(serializers.Serializer):
     flow_trace = serializers.IntegerField(required=True)
 
@@ -36,6 +16,28 @@ class FlowResultSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         validated_data["created_by"] = user
         return models.FlowResult.objects.create(**validated_data)
+
+
+class FlowTraceSerializer(serializers.ModelSerializer):
+    events = chains_serializers.ChainEventSerializer(many=True, read_only=True)
+    results = FlowResultSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.FlowTrace
+        fields = [
+            "id",
+            "prefect_flow_id",
+            "prefect_deployment_id",
+            "prefect_name",
+            "prefect_parameters",
+            "events",
+            "results",
+        ]
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        validated_data["created_by"] = user
+        return models.FlowTrace.objects.create(**validated_data)
 
 
 class FlowFilterSerializer(serializers.Serializer):
