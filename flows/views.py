@@ -140,3 +140,89 @@ class ReadFlowDeploymentsView(APIView):
             ).json(),
             status=status.HTTP_200_OK,
         )
+
+
+class FlowTraceRunCompositeView(APIView):
+    """
+    Post a Flow trace that also kicks of a run deployment from a flow name or deployment id
+    Composite endpoint to enhance user experience
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    @staticmethod
+    def get_flow_by_name(flow_name: str) -> requests.Response:
+        """Get a flow by its name
+
+        Args:
+            flow_name (str): flow name
+
+        Returns:
+            dict: response object
+        """
+        selected_flow = None
+        response = requests.post(f"{settings.PREFECT_API_URL}/deployments/filter")
+        for flow in response.json():
+            if flow["name"] == flow_name:
+                selected_flow = flow
+        return selected_flow
+
+    @swagger_auto_schema(
+        request_body=serializers.FlowTraceRunSerializer,
+    )
+    def post(self, request, *args, **kwargs):
+        """
+        Create a flow trace and deploy to runner
+        """
+        selected_flow = None
+        # get flow from list
+        flow_trace_run_serializer = serializers.FlowTraceRunSerializer(
+            data=request.data
+        )
+        flow_trace_run_serializer.is_valid(raise_exception=True)
+        if "prefect_name" in flow_trace_run_serializer.validated_data:
+            selected_flow = self.get_flow_by_name(
+                flow_trace_run_serializer.validated_data["prefect_name"]
+            )
+        # first create the flow trace
+        if selected_flow:
+            input_parameters = (
+                flow_trace_run_serializer.validated_data["prefect_parameters"]
+                if flow_trace_run_serializer.validated_data["prefect_parameters"]
+                else {}
+            )
+            flow_trace = models.FlowTrace.objects.create(
+                created_by=request.user,
+                prefect_flow_id=selected_flow["flow_id"],
+                prefect_deployment_id=selected_flow["id"],
+                prefect_name=selected_flow["name"],
+                prefect_parameters=input_parameters,
+            )
+            # create flow trace input
+            input_parameters["flow_trace"] = flow_trace.id
+            print(input_parameters)
+            # then deploy the flow
+            created_deployment = requests.post(
+                f"{settings.PREFECT_API_URL}/deployments/{flow_trace.prefect_deployment_id}/create_flow_run",
+                json={"name": flow_trace.prefect_name, "parameters": input_parameters},
+            )
+            response_data = {
+                "flow_trace": flow_trace.id,
+                "flow_run": created_deployment.json(),
+            }
+            if created_deployment.ok:
+                # save flow trace combine data into single response
+                return Response(
+                    response_data,
+                    status=status.HTTP_201_CREATED,
+                )
+            else:
+                return Response(
+                    response_data,
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return Response(
+                {"msg": "Flow not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )

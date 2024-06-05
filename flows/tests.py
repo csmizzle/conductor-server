@@ -152,3 +152,23 @@ class ApolloMarketResearchFlowTest(TestCase):
         )
         # get data from db
         self.assertEqual(deployed_flow_response.status_code, status.HTTP_201_CREATED)
+
+
+class FlowTraceRunCompositeTest(TestCase):
+    """Test module for GET all agent runs API"""
+
+    def setUp(self):
+        self.user = User.objects.create_superuser(username="testowy", password="test")
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.flow_trace_test_data = {"prefect_name": "Test Flow"}
+
+    def test_flow_trace_run_composite(self):
+        # get flow from list
+        created_flow_trace = self.client.post(
+            reverse("flow-trace-run"),
+            data=json.dumps(self.flow_trace_test_data),
+            content_type="application/json",
+        )
+        print(created_flow_trace.json())
+        self.assertEqual(created_flow_trace.status_code, status.HTTP_201_CREATED)

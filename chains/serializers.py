@@ -11,7 +11,7 @@ class CreateChainSummarizeContentSerializer(serializers.Serializer):
         required=True,
         help_text="List of URLs to summarize",
     )
-    flow_id = serializers.IntegerField(
+    flow_trace = serializers.IntegerField(
         required=False, help_text="ID of the flow to attach the event to"
     )
 
@@ -29,7 +29,7 @@ class ChainSummarySerializer(serializers.ModelSerializer):
 class CreateApolloInputSerializer(serializers.Serializer):
     """Serializer for Apollo input"""
 
-    flow_id = serializers.IntegerField(
+    flow_trace = serializers.IntegerField(
         required=False, help_text="ID of the flow to attach the event to"
     )
     query = serializers.CharField(required=True, max_length=5000)
@@ -62,7 +62,7 @@ class ChainTaskSerializer(serializers.ModelSerializer):
 class ApolloContextInputChain(serializers.Serializer):
     """Serializer for Apollo context input"""
 
-    flow_id = serializers.IntegerField(
+    flow_trace = serializers.IntegerField(
         required=False, help_text="ID of the flow to attach the event to"
     )
     person_titles = serializers.ListField(child=serializers.CharField(), required=True)
@@ -74,7 +74,7 @@ class ApolloContextInputChain(serializers.Serializer):
 class EmailFromContextSerializer(serializers.Serializer):
     """Serializer for creating email from context"""
 
-    flow_id = serializers.IntegerField(
+    flow_trace = serializers.IntegerField(
         required=False, help_text="ID of the flow to attach the event to"
     )
     tone = serializers.CharField(required=True)

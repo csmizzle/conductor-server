@@ -122,4 +122,5 @@ urlpatterns = [
         name="flow-deployments-create",
     ),
     path("results/", flow_views.FlowResultView.as_view(), name="flow-results"),
+    path("run/", flow_views.FlowTraceRunCompositeView.as_view(), name="flow-trace-run"),
 ]

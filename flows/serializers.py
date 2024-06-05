@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from flows import models
+from chains import serializers as chains_serializers
 
 
 class FlowTraceSerializer(serializers.ModelSerializer):
+    events = chains_serializers.ChainEventSerializer(many=True, read_only=True)
+
     class Meta:
         model = models.FlowTrace
         fields = [
@@ -11,6 +14,7 @@ class FlowTraceSerializer(serializers.ModelSerializer):
             "prefect_deployment_id",
             "prefect_name",
             "prefect_parameters",
+            "events",
         ]
 
     def create(self, validated_data):
@@ -49,3 +53,9 @@ class ReadDeploymentInputSerializer(serializers.Serializer):
         choices=["CREATED_DESC", "UPDATED_DESC", "NAME_ASC", "NAME_DESC"],
         default="NAME_ASC",
     )
+
+
+class FlowTraceRunSerializer(serializers.Serializer):
+    prefect_deployment_id = serializers.CharField(required=False)
+    prefect_name = serializers.CharField(required=False)
+    prefect_parameters = serializers.JSONField(required=False, default={})
