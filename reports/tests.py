@@ -66,7 +66,6 @@ class ReportToHtmlTest(TestCase):
         response = self.client.get(
             reverse("generate-html", kwargs={"report_id": report_id}),
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -93,5 +92,4 @@ class ReportToPDFTest(TestCase):
         response = self.client.get(
             reverse("generate-pdf", kwargs={"report_id": report_id}),
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
