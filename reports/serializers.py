@@ -8,17 +8,13 @@ from reports import models
 class ParagraphSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Paragraph
-        fields = ["title", "content"]
+        fields = ["id", "title", "content"]
 
     def create(self, validated_data):
         user = self.context["request"].user
-        paragraphs_data = validated_data.pop("paragraphs")
         validated_data["created_by"] = user
-        report = models.Report.objects.create(**validated_data)
-        for paragraph_data in paragraphs_data:
-            paragraph_data["created_by"] = user
-            models.Paragraph.objects.create(report=report, **paragraph_data)
-        return report
+        paragraph = models.Paragraph.objects.create(**validated_data)
+        return paragraph
 
 
 class ReportSerializer(serializers.ModelSerializer):
@@ -26,14 +22,17 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Report
-        fields = ["title", "description", "paragraphs"]
+        fields = ["id", "title", "description", "paragraphs"]
 
     def create(self, validated_data):
+        # get created_by user
         user = self.context["request"].user
-        paragraphs_data = validated_data.pop("paragraphs")
         validated_data["created_by"] = user
+        paragraphs_data = validated_data.pop("paragraphs")
         report = models.Report.objects.create(**validated_data)
         for paragraph_data in paragraphs_data:
+            # add created_by user to paragraph data
             paragraph_data["created_by"] = user
-            models.Paragraph.objects.create(report=report, **paragraph_data)
+            paragraph = models.Paragraph.objects.create(**paragraph_data)
+            report.paragraphs.add(paragraph)
         return report

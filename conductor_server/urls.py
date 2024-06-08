@@ -70,7 +70,7 @@ router.register(
     basename="reports",
 )
 router.register(
-    r"reports/paragraphs",
+    r"paragraphs",
     report_views.ParagraphViewSet,
     basename="paragraphs",
 )
@@ -123,4 +123,9 @@ urlpatterns = [
     ),
     path("results/", flow_views.FlowResultView.as_view(), name="flow-results"),
     path("run/", flow_views.FlowTraceRunCompositeView.as_view(), name="flow-trace-run"),
+    path(
+        "generate/<int:report_id>/html/",
+        report_views.ReportToHtmlView.as_view(),
+        name="generate-report-html",
+    ),
 ]

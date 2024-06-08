@@ -18,7 +18,7 @@ class Report(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    paragraphs = models.ManyToManyField(Paragraph)
+    paragraphs = models.ManyToManyField(Paragraph, related_name="paragraphs")
 
     def __str__(self):
         return self.title
