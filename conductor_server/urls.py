@@ -126,6 +126,11 @@ urlpatterns = [
     path(
         "generate/<int:report_id>/html/",
         report_views.ReportToHtmlView.as_view(),
-        name="generate-report-html",
+        name="generate-html",
+    ),
+    path(
+        "generate/<int:report_id>/pdf/",
+        report_views.ReportToPDFView.as_view(),
+        name="generate-pdf",
     ),
 ]
