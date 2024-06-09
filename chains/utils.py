@@ -28,7 +28,7 @@ def run_map_reduce_summarize(content: list[str], task_id: str, event_id: int) ->
         task.status = models.ChainTaskStatus.COMPLETED
         task.save()
         # update event output
-        event.output = summary
+        event.output = summary["output_text"]
         event.save()
     except Exception as e:
         logging.error(f"Error in task {task_id}: {str(e)}")

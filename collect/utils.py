@@ -2,8 +2,7 @@
 Utility functions for the collect module.
 """
 import logging
-
-from conductor.functions.apify_ import sync_summarize_urls
+from conductor.functions.crawl import sync_summarize_urls
 
 from collect import models
 

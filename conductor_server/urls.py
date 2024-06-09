@@ -19,13 +19,13 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
-from agents import views as agent_views
 from buckets import views as bucket_views
 from chains import views as chains_views
 from collect import views as collect_views
 from flows import views as flow_views
 from search import views as search_views
 from reports import views as report_views
+from pprint import pprint
 
 api_info = openapi.Info(
     title="Conductor API",
@@ -80,6 +80,8 @@ router.register(
     basename="flows",
 )
 
+pprint(router.urls)
+
 urlpatterns = [
     path("", include(router.urls)),
     path(
@@ -92,7 +94,6 @@ urlpatterns = [
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("admin/", admin.site.urls),
-    path("agents/", agent_views.MarketEmailCrewViewSet.as_view(), name="agents"),
     path(
         "search/apollo/", search_views.ApolloSearchView.as_view(), name="search_apollo"
     ),

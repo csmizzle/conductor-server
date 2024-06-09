@@ -14,7 +14,7 @@ class PostSummarizeUrlsTest(TestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_post_summarize_urls(self):
-        url = reverse("url-summary-create")
+        url = reverse("url-summary-list")
         data = {
             "urls": [
                 "https://webscraper.io/test-sites/e-commerce/ajax",
@@ -33,6 +33,6 @@ class GetTaskTest(TestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_get_task(self):
-        url = reverse("task-list")
+        url = reverse("collect-task-list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
