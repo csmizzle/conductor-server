@@ -71,6 +71,19 @@ class ApolloContextInputChain(serializers.Serializer):
     )
 
 
+class ApolloUrlContextInputChain(serializers.Serializer):
+    """Serializer for Apollo context URL input"""
+
+    flow_trace = serializers.IntegerField(
+        required=False, help_text="ID of the flow to attach the event to"
+    )
+    company_domains = serializers.ListField(
+        child=serializers.CharField(),
+        required=True,
+        help_text="List of company URLs to get context for",
+    )
+
+
 class EmailFromContextSerializer(serializers.Serializer):
     """Serializer for creating email from context"""
 
