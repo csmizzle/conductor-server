@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from conductor.reports import models as pydantic_models
+from chains.models import ChainTask
 
 
 # Create your models here.
@@ -21,6 +22,9 @@ class Paragraph(models.Model):
 
 
 class Report(models.Model):
+    task = models.ForeignKey(
+        ChainTask, on_delete=models.CASCADE, related_name="report", null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)

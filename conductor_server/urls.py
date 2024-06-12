@@ -25,6 +25,7 @@ from collect import views as collect_views
 from flows import views as flow_views
 from search import views as search_views
 from reports import views as report_views
+from agents import views as agent_views
 
 api_info = openapi.Info(
     title="Conductor API",
@@ -136,5 +137,10 @@ urlpatterns = [
         "generate/<int:report_id>/pdf/",
         report_views.ReportToPDFView.as_view(),
         name="generate-pdf",
+    ),
+    path(
+        "crews/marketing/report",
+        agent_views.URLMarketingCrewView.as_view(),
+        name="marketing-report",
     ),
 ]
