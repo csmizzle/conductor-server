@@ -21,6 +21,23 @@ class Paragraph(models.Model):
         )
 
 
+class Section(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    paragraphs = models.ManyToManyField(Paragraph, related_name="paragraphs")
+
+    def __str__(self):
+        return self.title
+
+    def to_pydantic(self) -> pydantic_models.Section:
+        paragraphs = [paragraph.to_pydantic() for paragraph in self.paragraphs.all()]
+        return pydantic_models.Section(
+            title=self.title,
+            paragraphs=paragraphs,
+        )
+
+
 class Report(models.Model):
     task = models.ForeignKey(
         ChainTask, on_delete=models.CASCADE, related_name="report", null=True
@@ -29,15 +46,16 @@ class Report(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    paragraphs = models.ManyToManyField(Paragraph, related_name="paragraphs")
+    sections = models.ManyToManyField(Section, related_name="sections")
+    raw = models.TextField(null=True, default=None)
 
     def __str__(self):
         return self.title
 
     def to_pydantic(self) -> pydantic_models.Report:
-        paragraphs = [paragraph.to_pydantic() for paragraph in self.paragraphs.all()]
+        sections = [section.to_pydantic() for section in self.sections.all()]
         return pydantic_models.Report(
             title=self.title,
             description=self.description,
-            paragraphs=paragraphs,
+            sections=sections,
         )

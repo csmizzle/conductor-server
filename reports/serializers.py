@@ -10,29 +10,47 @@ class ParagraphSerializer(serializers.ModelSerializer):
         model = models.Paragraph
         fields = ["id", "title", "content"]
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> models.Paragraph:
         user = self.context["request"].user
         validated_data["created_by"] = user
         paragraph = models.Paragraph.objects.create(**validated_data)
         return paragraph
 
 
-class ReportSerializer(serializers.ModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
     paragraphs = ParagraphSerializer(many=True)
 
     class Meta:
-        model = models.Report
-        fields = ["id", "title", "description", "paragraphs"]
+        model = models.Section
+        fields = ["id", "title", "paragraphs"]
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> models.Section:
+        user = self.context["request"].user
+        validated_data["created_by"] = user
+        section = models.Section.objects.create(**validated_data)
+        return section
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    sections = SectionSerializer(many=True)
+
+    class Meta:
+        model = models.Report
+        fields = ["id", "title", "description", "sections"]
+
+    def create(self, validated_data) -> models.Report:
         # get created_by user
         user = self.context["request"].user
         validated_data["created_by"] = user
-        paragraphs_data = validated_data.pop("paragraphs")
+        sections_data = validated_data.pop("sections")
         report = models.Report.objects.create(**validated_data)
-        for paragraph_data in paragraphs_data:
-            # add created_by user to paragraph data
-            paragraph_data["created_by"] = user
-            paragraph = models.Paragraph.objects.create(**paragraph_data)
-            report.paragraphs.add(paragraph)
+        for section_entry in sections_data:
+            paragraphs_data = section_entry.pop("paragraphs")
+            section_entry["created_by"] = user
+            section = models.Section.objects.create(**section_entry)
+            for paragraph_entry in paragraphs_data:
+                paragraph_entry["created_by"] = user
+                paragraph = models.Paragraph.objects.create(**paragraph_entry)
+                section.paragraphs.add(paragraph)
+            report.sections.add(section)
         return report

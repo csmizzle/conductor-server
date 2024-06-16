@@ -5,9 +5,47 @@ from django.contrib.auth.models import User
 import logging
 from chains import models as chains_models
 from reports import models as report_models
-from conductor.crews.marketing import run_url_marketing_report as url_marketing_report
+from conductor.crews.marketing import url_marketing_report
+from conductor.reports.models import Report
 
 logger = logging.getLogger(__name__)
+
+
+def save_pydantic_report(
+    pydantic_report: Report,
+    user: User,
+    task: chains_models.ChainTask,
+) -> report_models.Report:
+    """
+    Save a Pydantic report to the database
+    """
+    report = report_models.Report.objects.create(
+        created_by=user,
+        task=task,
+        title=pydantic_report.title,
+        description=pydantic_report.description,
+    )
+    report.raw = pydantic_report.raw
+    report.save()
+    # create sections and paragraphs
+    for section_entry in pydantic_report.sections:
+        logger.info("Creating section ...")
+        section = report_models.Section.objects.create(
+            created_by=user, title=section_entry.title
+        )
+        for paragraph in section_entry.paragraphs:
+            logger.info("Creating paragraph ...")
+            paragraph = report_models.Paragraph.objects.create(
+                created_by=user,
+                title=paragraph.title,
+                content=paragraph.content,
+            )
+            logger.info("Adding paragraph to section ...")
+            section.paragraphs.add(paragraph)
+        report.sections.add(section)
+    logger.info("Saving report ...")
+    report.save()
+    return report
 
 
 def run_url_marketing_report(
@@ -25,23 +63,16 @@ def run_url_marketing_report(
     try:
         url_report = url_marketing_report(url)
         # save event status and save report
+        # save raw output to event
+        logger.info("Saving raw result ...")
+        event.output = url_report.raw
+        event.save()
         logger.info("Creating report ...")
-        report = report_models.Report.objects.create(
-            created_by=user,
+        report = save_pydantic_report(
+            pydantic_report=url_report,
+            user=user,
             task=task,
-            title=url_report.title,
-            description=url_report.description,
         )
-        # create paragraphs
-        for paragraph in url_report.paragraphs:
-            logger.info("Creating paragraph ...")
-            paragraph = report_models.Paragraph.objects.create(
-                created_by=user, title=paragraph.title, content=paragraph.content
-            )
-            logger.info("Adding paragraph to report ...")
-            report.paragraphs.add(paragraph)
-        logger.info("Saving report ...")
-        report.save()
         # update task status to completed
         logger.info("Updating task status to completed ...")
         task.status = chains_models.ChainTaskStatus.COMPLETED
