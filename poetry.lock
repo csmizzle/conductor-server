@@ -1568,7 +1568,7 @@ scrapy = "^2.11.1"
 type = "git"
 url = "https://github.com/csmizzle/conductor.git"
 reference = "HEAD"
-resolved_reference = "362885c27c245528106269ef02faca156bb9f1d5"
+resolved_reference = "b405edda75c0304c45f37e181703f74f7b377e64"
 
 [[package]]
 name = "conductor-discord"

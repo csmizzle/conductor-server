@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "conductor-server"
-version = "0.1.4"
+version = "0.1.5"
 description = "Server for Conductor"
 authors = ["csmizzle <chrissmith700@gmail.com>"]
 readme = "README.md"
