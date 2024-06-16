@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from chains import models
 
 
@@ -68,6 +67,19 @@ class ApolloContextInputChain(serializers.Serializer):
     person_titles = serializers.ListField(child=serializers.CharField(), required=True)
     person_locations = serializers.ListField(
         child=serializers.CharField(), required=True
+    )
+
+
+class ApolloUrlContextInputChain(serializers.Serializer):
+    """Serializer for Apollo context URL input"""
+
+    flow_trace = serializers.IntegerField(
+        required=False, help_text="ID of the flow to attach the event to"
+    )
+    company_domains = serializers.ListField(
+        child=serializers.CharField(),
+        required=True,
+        help_text="List of company URLs to get context for",
     )
 
 

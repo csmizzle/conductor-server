@@ -1,11 +1,9 @@
 from django.contrib.auth.models import User
-from django.test import Client, TestCase
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 import json
-
-client = Client()
 
 
 class ReportInputChainTest(TestCase):
@@ -16,8 +14,20 @@ class ReportInputChainTest(TestCase):
         self.valid_payload = {
             "title": "Test Report",
             "description": "This is a test report",
-            "paragraphs": [
-                {"title": "Test Paragraph", "content": "This is a test paragraph"}
+            "sections": [
+                {
+                    "title": "Test Section",
+                    "paragraphs": [
+                        {
+                            "title": "Test Paragraph",
+                            "content": "This is a test paragraph",
+                        },
+                        {
+                            "title": "Test Paragraph",
+                            "content": "This is a test paragraph",
+                        },
+                    ],
+                }
             ],
         }
         self.invalid_payload = {"title": None}
@@ -28,7 +38,6 @@ class ReportInputChainTest(TestCase):
             data=json.dumps(self.valid_payload),
             content_type="application/json",
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # get list of reports
         response = self.client.get(reverse("reports-list"))
@@ -51,8 +60,20 @@ class ReportToHtmlTest(TestCase):
         self.payload = {
             "title": "Test Report",
             "description": "This is a test report",
-            "paragraphs": [
-                {"title": "Test Paragraph", "content": "This is a test paragraph"}
+            "sections": [
+                {
+                    "title": "Test Section",
+                    "paragraphs": [
+                        {
+                            "title": "Test Paragraph",
+                            "content": "This is a test paragraph",
+                        },
+                        {
+                            "title": "Test Paragraph",
+                            "content": "This is a test paragraph",
+                        },
+                    ],
+                }
             ],
         }
 
@@ -77,8 +98,20 @@ class ReportToPDFTest(TestCase):
         self.payload = {
             "title": "Test Report",
             "description": "This is a test report",
-            "paragraphs": [
-                {"title": "Test Paragraph", "content": "This is a test paragraph"}
+            "sections": [
+                {
+                    "title": "Test Section",
+                    "paragraphs": [
+                        {
+                            "title": "Test Paragraph",
+                            "content": "This is a test paragraph",
+                        },
+                        {
+                            "title": "Test Paragraph",
+                            "content": "This is a test paragraph",
+                        },
+                    ],
+                }
             ],
         }
 

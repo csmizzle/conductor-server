@@ -25,7 +25,7 @@ from collect import views as collect_views
 from flows import views as flow_views
 from search import views as search_views
 from reports import views as report_views
-from pprint import pprint
+from agents import views as agent_views
 
 api_info = openapi.Info(
     title="Conductor API",
@@ -50,14 +50,19 @@ router.register(
     basename="chains-summarize",
 )
 router.register(
-    r"chains/apollo/input",
+    r"chains/apollo/people/input",
     chains_views.ApolloInputChainView,
-    basename="chains-apollo-input",
+    basename="chains-people-apollo-input",
 )
 router.register(
-    r"chains/apollo/context",
+    r"chains/apollo/people/context",
     chains_views.ApolloContextChainView,
-    basename="chains-apollo-context",
+    basename="chains-people-apollo-context",
+)
+router.register(
+    r"chains/apollo/url/context",
+    chains_views.ApolloUrlContextChainView,
+    basename="chains-url-apollo-context",
 )
 router.register(
     r"chains/email/context",
@@ -80,7 +85,6 @@ router.register(
     basename="flows",
 )
 
-pprint(router.urls)
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -133,5 +137,10 @@ urlpatterns = [
         "generate/<int:report_id>/pdf/",
         report_views.ReportToPDFView.as_view(),
         name="generate-pdf",
+    ),
+    path(
+        "crews/marketing/report",
+        agent_views.URLMarketingCrewView.as_view(),
+        name="marketing-report",
     ),
 ]

@@ -233,3 +233,52 @@ class CreateEmailChainView(ReadCreateModelViewSet):
         response_serializer.is_valid(raise_exception=True)
         response_serializer.save()
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ApolloUrlContextChainView(ReadCreateModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.ChainEventSerializer
+    queryset = models.ChainEvent.objects.all().filter(
+        chain_name=apollo.generate_apollo_person_domain_search_context.__name__
+    )
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(created_by=self.request.user)
+
+    @swagger_auto_schema(
+        request_body=serializers.ApolloUrlContextInputChain,
+    )
+    def create(self, request, *args, **kwargs):
+        """
+        Create a new Apollo context
+        """
+        flow_trace = None
+        request_serializer = serializers.ApolloUrlContextInputChain(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        if request_serializer.validated_data.get("flow_trace"):
+            flow_trace = flow_models.FlowTrace.objects.get(
+                id=request_serializer.validated_data.get("flow_trace"),
+                created_by=request.user,
+            )
+        apollo_context = apollo.generate_apollo_person_domain_search_context(
+            company_domains=request_serializer.validated_data["company_domains"],
+        )
+        response_serializer = serializers.ChainEventSerializer(
+            data={
+                "flow_trace": flow_trace.id if flow_trace else None,
+                "created_by": request.user.id,
+                "chain_name": apollo.generate_apollo_person_domain_search_context.__name__,
+                "input": json.dumps(
+                    {
+                        "company_domains": request_serializer.validated_data[
+                            "company_domains"
+                        ]
+                    }
+                ),
+                "output": apollo_context,
+            }
+        )
+        response_serializer.is_valid(raise_exception=True)
+        response_serializer.save()
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)

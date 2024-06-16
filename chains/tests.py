@@ -17,7 +17,7 @@ class ApolloInputChainTest(TestCase):
 
     def test_create_valid_apollo_search(self):
         response = self.client.post(
-            reverse("chains-apollo-input-list"),
+            reverse("chains-people-apollo-input-list"),
             data=json.dumps(self.valid_payload),
             content_type="application/json",
         )
@@ -25,7 +25,7 @@ class ApolloInputChainTest(TestCase):
 
     def test_create_invalid_apollo_search(self):
         response = self.client.post(
-            reverse("chains-apollo-input-list"),
+            reverse("chains-people-apollo-input-list"),
             data=json.dumps(self.invalid_payload),
             content_type="application/json",
         )
@@ -55,8 +55,26 @@ class ApolloInputFlowChainTest(TestCase):
         # attach query to flow
         self.query_payload["flow_id"] = response.json()["id"]
         response = self.client.post(
-            reverse("chains-apollo-input-list"),
+            reverse("chains-people-apollo-input-list"),
             data=json.dumps(self.query_payload),
             content_type="application/json",
         )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class ApolloUrlFlowChainTest(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_superuser(username="testowy", password="test")
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.payload = {"company_domains": ["https://trssllc.com"]}
+
+    def test_create_valid_apollo_search(self):
+        # attach query to flow
+        response = self.client.post(
+            reverse("chains-url-apollo-context-list"),
+            data=json.dumps(self.payload),
+            content_type="application/json",
+        )
+        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
