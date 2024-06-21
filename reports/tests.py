@@ -12,23 +12,27 @@ class ReportInputChainTest(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.valid_payload = {
-            "title": "Test Report",
-            "description": "This is a test report",
-            "sections": [
-                {
-                    "title": "Test Section",
-                    "paragraphs": [
-                        {
-                            "title": "Test Paragraph",
-                            "content": "This is a test paragraph",
-                        },
-                        {
-                            "title": "Test Paragraph",
-                            "content": "This is a test paragraph",
-                        },
-                    ],
-                }
-            ],
+            "report": {
+                "title": "Test Report",
+                "description": "This is a test report",
+                "sections": [
+                    {
+                        "title": "Test Section",
+                        "paragraphs": [
+                            {
+                                "title": "Test Paragraph",
+                                "content": "This is a test paragraph",
+                            },
+                            {
+                                "title": "Test Paragraph",
+                                "content": "This is a test paragraph",
+                            },
+                        ],
+                    }
+                ],
+            },
+            "style": "BULLETED",
+            "raw": "This is a test report.",
         }
         self.invalid_payload = {"title": None}
 
@@ -38,6 +42,7 @@ class ReportInputChainTest(TestCase):
             data=json.dumps(self.valid_payload),
             content_type="application/json",
         )
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # get list of reports
         response = self.client.get(reverse("reports-list"))
@@ -58,23 +63,27 @@ class ReportToHtmlTest(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.payload = {
-            "title": "Test Report",
-            "description": "This is a test report",
-            "sections": [
-                {
-                    "title": "Test Section",
-                    "paragraphs": [
-                        {
-                            "title": "Test Paragraph",
-                            "content": "This is a test paragraph",
-                        },
-                        {
-                            "title": "Test Paragraph",
-                            "content": "This is a test paragraph",
-                        },
-                    ],
-                }
-            ],
+            "report": {
+                "title": "Test Report",
+                "description": "This is a test report",
+                "sections": [
+                    {
+                        "title": "Test Section",
+                        "paragraphs": [
+                            {
+                                "title": "Test Paragraph",
+                                "content": "This is a test paragraph",
+                            },
+                            {
+                                "title": "Test Paragraph",
+                                "content": "This is a test paragraph",
+                            },
+                        ],
+                    }
+                ],
+            },
+            "style": "as bulleted lists, avoiding long paragraphs.",
+            "raw": "This is a test report.",
         }
 
     def test_report_to_html(self):
@@ -96,23 +105,27 @@ class ReportToPDFTest(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.payload = {
-            "title": "Test Report",
-            "description": "This is a test report",
-            "sections": [
-                {
-                    "title": "Test Section",
-                    "paragraphs": [
-                        {
-                            "title": "Test Paragraph",
-                            "content": "This is a test paragraph",
-                        },
-                        {
-                            "title": "Test Paragraph",
-                            "content": "This is a test paragraph",
-                        },
-                    ],
-                }
-            ],
+            "report": {
+                "title": "Test Report",
+                "description": "This is a test report",
+                "sections": [
+                    {
+                        "title": "Test Section",
+                        "paragraphs": [
+                            {
+                                "title": "Test Paragraph",
+                                "content": "This is a test paragraph",
+                            },
+                            {
+                                "title": "Test Paragraph",
+                                "content": "This is a test paragraph",
+                            },
+                        ],
+                    }
+                ],
+            },
+            "style": "as bulleted lists, avoiding long paragraphs.",
+            "raw": "This is a test report.",
         }
 
     def test_report_to_html(self):

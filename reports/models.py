@@ -38,7 +38,7 @@ class Section(models.Model):
         )
 
 
-class Report(models.Model):
+class ParsedReport(models.Model):
     task = models.ForeignKey(
         ChainTask, on_delete=models.CASCADE, related_name="report", null=True
     )
@@ -47,15 +47,38 @@ class Report(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     sections = models.ManyToManyField(Section, related_name="sections")
-    raw = models.TextField(null=True, default=None)
 
     def __str__(self):
         return self.title
 
     def to_pydantic(self) -> pydantic_models.Report:
         sections = [section.to_pydantic() for section in self.sections.all()]
-        return pydantic_models.Report(
+        return pydantic_models.ParsedReport(
             title=self.title,
             description=self.description,
             sections=sections,
+        )
+
+
+class Report(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    report = models.ForeignKey(
+        ParsedReport, on_delete=models.CASCADE, null=True, related_name="report"
+    )
+    raw = models.TextField(null=True, blank=True)
+    style = models.CharField(
+        max_length=255,
+        choices=[(tag.name, tag.value) for tag in pydantic_models.ReportStyle],
+        default=pydantic_models.ReportStyle.BULLETED.name,
+    )
+
+    def __str__(self):
+        return self.raw
+
+    def to_pydantic(self) -> pydantic_models.Report:
+        return pydantic_models.Report(
+            report=self.report.to_pydantic(),
+            raw=self.raw,
+            style=pydantic_models.ReportStyle(self.style),
         )

@@ -9,6 +9,7 @@ from reports.models import Report
 from chains import models
 import json
 from conductor.reports.models import Report as PydanticReport
+from conductor.reports.models import ReportStyle
 
 
 class MarketingReportInputChainTest(TestCase):
@@ -75,23 +76,27 @@ class SavePydanticReportTestCase(TestCase):
         )
         self.report = PydanticReport(
             **{
-                "title": "Test Report",
-                "description": "This is a test report",
-                "sections": [
-                    {
-                        "title": "Test Section",
-                        "paragraphs": [
-                            {
-                                "title": "Test Paragraph",
-                                "content": "This is a test paragraph",
-                            },
-                            {
-                                "title": "Test Paragraph",
-                                "content": "This is a test paragraph",
-                            },
-                        ],
-                    }
-                ],
+                "report": {
+                    "title": "Test Report",
+                    "description": "This is a test report",
+                    "sections": [
+                        {
+                            "title": "Test Section",
+                            "paragraphs": [
+                                {
+                                    "title": "Test Paragraph",
+                                    "content": "This is a test paragraph",
+                                },
+                                {
+                                    "title": "Test Paragraph",
+                                    "content": "This is a test paragraph",
+                                },
+                            ],
+                        }
+                    ],
+                },
+                "style": ReportStyle.BULLETED,
+                "raw": "This is a test report.",
             }
         )
 
@@ -101,4 +106,5 @@ class SavePydanticReportTestCase(TestCase):
             user=self.user,
             task=self.task,
         )
+        print("Report", report.__dict__)
         assert isinstance(report, Report)

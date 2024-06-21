@@ -19,16 +19,20 @@ def save_pydantic_report(
     """
     Save a Pydantic report to the database
     """
-    report = report_models.Report.objects.create(
+    parsed_report = report_models.ParsedReport.objects.create(
         created_by=user,
         task=task,
-        title=pydantic_report.title,
-        description=pydantic_report.description,
+        title=pydantic_report.report.title,
+        description=pydantic_report.report.description,
     )
-    report.raw = pydantic_report.raw
-    report.save()
+    report = report_models.Report.objects.create(
+        created_by=user,
+        report=parsed_report,
+        raw=pydantic_report.raw,
+        style=pydantic_report.style,
+    )
     # create sections and paragraphs
-    for section_entry in pydantic_report.sections:
+    for section_entry in pydantic_report.report.sections:
         logger.info("Creating section ...")
         section = report_models.Section.objects.create(
             created_by=user, title=section_entry.title
@@ -42,7 +46,7 @@ def save_pydantic_report(
             )
             logger.info("Adding paragraph to section ...")
             section.paragraphs.add(paragraph)
-        report.sections.add(section)
+        report.report.sections.add(section)
     logger.info("Saving report ...")
     report.save()
     return report
