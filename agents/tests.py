@@ -67,6 +67,10 @@ class MarketingReportTestCase(TestCase):
             task_id=self.task.task_id,
         )
         assert isinstance(report, Report)
+        assert report.report is not None
+        assert report.style == ReportStyle.BULLETED.value
+        assert report.raw is not None
+        assert isinstance(report.crew_run, agent_models.CrewRun)
 
 
 class SavePydanticReportTestCase(TestCase):
@@ -115,6 +119,8 @@ class SavePydanticReportTestCase(TestCase):
             task=self.task,
         )
         assert isinstance(report, Report)
+        # make sure enum serialized correctly
+        assert report.style == ReportStyle.BULLETED.value
 
 
 class SaveCrewRunTestCase(TestCase):

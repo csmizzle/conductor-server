@@ -52,7 +52,7 @@ def save_pydantic_report(
         created_by=user,
         report=parsed_report,
         raw=pydantic_report.raw,
-        style=pydantic_report.style,
+        style=pydantic_report.style.value,
     )
     # create sections and paragraphs
     for section_entry in pydantic_report.report.sections:
@@ -114,6 +114,10 @@ def run_url_marketing_report(
             user=user,
             task=task,
         )
+        # save crew run to report
+        logger.info("Saving crew run to report ...")
+        report.crew_run = crew_run
+        report.save()
         # update task status to completed
         logger.info("Updating task status to completed ...")
         task.status = chains_models.ChainTaskStatus.COMPLETED
@@ -130,11 +134,11 @@ def run_url_marketing_report(
         raise exception
 
 
-def style_input_to_enum(style: str) -> str:
+def style_input_to_enum(style: str) -> ReportStyle:
     """
     Convert style input to ReportStyle enum
     """
     if style == "BULLETED":
-        return ReportStyle.BULLETED.value
+        return ReportStyle.BULLETED
     elif style == "NARRATIVE":
-        return ReportStyle.NARRATIVE.value
+        return ReportStyle.NARRATIVE

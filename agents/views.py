@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework import permissions
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from agents import serializers as agent_serializers
@@ -16,6 +17,8 @@ class URLMarketingCrewView(APIView):
     """
     Expose marketing crew to create marketing reports
     """
+
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         request_body=agent_serializers.URLMarketingCrewSerializer,
@@ -49,6 +52,7 @@ class URLMarketingCrewView(APIView):
 
 
 class CrewRunReadOnlyViewSet(ReadOnlyModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = agent_models.CrewRun.objects.all()
     serializer_class = agent_serializers.CrewRunSerializer
 

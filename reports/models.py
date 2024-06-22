@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from conductor.reports import models as pydantic_models
 from chains.models import ChainTask
+from agents.models import CrewRun
 
 
 # Create your models here.
@@ -71,6 +72,13 @@ class Report(models.Model):
         max_length=255,
         choices=[(tag.name, tag.value) for tag in pydantic_models.ReportStyle],
         default=pydantic_models.ReportStyle.BULLETED.value,
+    )
+    crew_run = models.OneToOneField(
+        CrewRun,
+        on_delete=models.CASCADE,
+        related_name="crew_run",
+        null=True,
+        default=None,
     )
 
     def __str__(self):

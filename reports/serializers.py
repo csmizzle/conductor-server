@@ -3,6 +3,7 @@ Report and paragraph serializers
 """
 from rest_framework import serializers
 from reports import models
+from agents.serializers import CrewRunSerializer
 
 
 class ParagraphSerializer(serializers.ModelSerializer):
@@ -56,10 +57,11 @@ class ParsedReportSerializer(serializers.ModelSerializer):
 
 class ReportSerializer(serializers.ModelSerializer):
     report = ParsedReportSerializer()
+    crew_run = CrewRunSerializer()
 
     class Meta:
         model = models.Report
-        fields = ["id", "report", "raw", "style"]
+        fields = ["id", "report", "crew_run", "raw", "style"]
 
     def create(self, validated_data) -> models.Report:
         # get created_by user
