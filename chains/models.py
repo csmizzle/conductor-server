@@ -35,8 +35,12 @@ class ChainTask(models.Model):
     Celery task model
     """
 
-    event_id = models.ForeignKey(
-        ChainEvent, on_delete=models.CASCADE, null=True, default=None
+    event = models.ForeignKey(
+        ChainEvent,
+        on_delete=models.CASCADE,
+        related_name="event",
+        null=True,
+        default=None,
     )
     task_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)

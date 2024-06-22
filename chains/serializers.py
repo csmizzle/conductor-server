@@ -41,7 +41,7 @@ class ChainEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ChainEvent
-        fields = "__all__"
+        fields = ["id", "input"]
 
 
 class ChainTaskSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class ChainTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChainTask
         fields = "__all__"
-        read_only_fields = ("task_id", "created_at", "status")
+        read_only_fields = ("task_id", "created_at", "status", "event")
 
 
 class ApolloContextInputChain(serializers.Serializer):

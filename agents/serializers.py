@@ -13,7 +13,7 @@ class URLMarketingCrewSerializer(serializers.Serializer):
 class CrewTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CrewTask
-        fields = ["id", "description", "output"]
+        fields = ["id", "agent_role", "description", "output"]
 
     def create(self, validated_data) -> models.CrewTask:
         user = self.context["request"].user
