@@ -4,6 +4,7 @@ Report and paragraph serializers
 from rest_framework import serializers
 from reports import models
 from agents.serializers import CrewRunSerializer
+from chains.serializers import ChainTaskSerializer
 
 
 class ParagraphSerializer(serializers.ModelSerializer):
@@ -34,10 +35,11 @@ class SectionSerializer(serializers.ModelSerializer):
 
 class ParsedReportSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True)
+    task = ChainTaskSerializer(read_only=True)
 
     class Meta:
         model = models.ParsedReport
-        fields = ["id", "title", "description", "sections"]
+        fields = ["id", "task", "title", "description", "sections"]
 
     def create(self, validated_data) -> models.ParsedReport:
         user = self.context["request"].user

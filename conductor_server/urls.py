@@ -19,11 +19,7 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
-from buckets import views as bucket_views
 from chains import views as chains_views
-from collect import views as collect_views
-from flows import views as flow_views
-from search import views as search_views
 from reports import views as report_views
 from agents import views as agent_views
 
@@ -39,36 +35,36 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register(r"collect/tasks", collect_views.TaskViewSet, basename="collect-task")
-router.register(
-    r"collect/url/summarize", collect_views.URLSummaryViewSet, basename="url-summary"
-)
+# router.register(r"collect/tasks", collect_views.TaskViewSet, basename="collect-task")
+# router.register(
+#     r"collect/url/summarize", collect_views.URLSummaryViewSet, basename="url-summary"
+# )
 router.register(r"chains/tasks", chains_views.TaskViewSet, basename="chains-task")
-router.register(
-    r"chains/summarize",
-    chains_views.SummarizeContentViewSet,
-    basename="chains-summarize",
-)
-router.register(
-    r"chains/apollo/people/input",
-    chains_views.ApolloInputChainView,
-    basename="chains-people-apollo-input",
-)
-router.register(
-    r"chains/apollo/people/context",
-    chains_views.ApolloContextChainView,
-    basename="chains-people-apollo-context",
-)
-router.register(
-    r"chains/apollo/url/context",
-    chains_views.ApolloUrlContextChainView,
-    basename="chains-url-apollo-context",
-)
-router.register(
-    r"chains/email/context",
-    chains_views.CreateEmailChainView,
-    basename="chains-email-from-context",
-)
+# router.register(
+#     r"chains/summarize",
+#     chains_views.SummarizeContentViewSet,
+#     basename="chains-summarize",
+# )
+# router.register(
+#     r"chains/apollo/people/input",
+#     chains_views.ApolloInputChainView,
+#     basename="chains-people-apollo-input",
+# )
+# router.register(
+#     r"chains/apollo/people/context",
+#     chains_views.ApolloContextChainView,
+#     basename="chains-people-apollo-context",
+# )
+# router.register(
+#     r"chains/apollo/url/context",
+#     chains_views.ApolloUrlContextChainView,
+#     basename="chains-url-apollo-context",
+# )
+# router.register(
+#     r"chains/email/context",
+#     chains_views.CreateEmailChainView,
+#     basename="chains-email-from-context",
+# )
 router.register(
     r"reports",
     report_views.ReportViewSet,
@@ -79,16 +75,16 @@ router.register(
     report_views.ParagraphViewSet,
     basename="paragraphs",
 )
-router.register(
-    r"flows",
-    flow_views.FlowTraceViewSet,
-    basename="flows",
-)
-router.register(
-    r"runs",
-    agent_views.CrewRunReadOnlyViewSet,
-    basename="runs",
-)
+# router.register(
+#     r"flows",
+#     flow_views.FlowTraceViewSet,
+#     basename="flows",
+# )
+# router.register(
+#     r"runs",
+#     agent_views.CrewRunReadOnlyViewSet,
+#     basename="runs",
+# )
 
 
 urlpatterns = [
@@ -103,36 +99,36 @@ urlpatterns = [
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("admin/", admin.site.urls),
-    path(
-        "search/apollo/", search_views.ApolloSearchView.as_view(), name="search_apollo"
-    ),
-    path(
-        "search/discord/",
-        search_views.DiscordSearchView.as_view(),
-        name="search_discord",
-    ),
-    path("search/", search_views.PineconeSearchView.as_view(), name="search"),
-    path("buckets/", bucket_views.BucketApi.as_view(), name="buckets"),
-    path(
-        "buckets/object/", bucket_views.BucketObjectApi.as_view(), name="buckets-object"
-    ),
-    path(
-        "buckets/object/latest/",
-        bucket_views.BucketObjectLatestView.as_view(),
-        name="buckets-object-latest",
-    ),
-    path(
-        "deployments/",
-        flow_views.ReadFlowDeploymentsView.as_view(),
-        name="flow-deployments-list",
-    ),
-    path(
-        "deployments/<int:flow_trace>/run",
-        flow_views.FlowRunApiView.as_view(),
-        name="flow-deployments-create",
-    ),
-    path("results/", flow_views.FlowResultView.as_view(), name="flow-results"),
-    path("run/", flow_views.FlowTraceRunCompositeView.as_view(), name="flow-trace-run"),
+    # path(
+    #     "search/apollo/", search_views.ApolloSearchView.as_view(), name="search_apollo"
+    # ),
+    # path(
+    #     "search/discord/",
+    #     search_views.DiscordSearchView.as_view(),
+    #     name="search_discord",
+    # ),
+    # path("search/", search_views.PineconeSearchView.as_view(), name="search"),
+    # path("buckets/", bucket_views.BucketApi.as_view(), name="buckets"),
+    # path(
+    #     "buckets/object/", bucket_views.BucketObjectApi.as_view(), name="buckets-object"
+    # ),
+    # path(
+    #     "buckets/object/latest/",
+    #     bucket_views.BucketObjectLatestView.as_view(),
+    #     name="buckets-object-latest",
+    # ),
+    # path(
+    #     "deployments/",
+    #     flow_views.ReadFlowDeploymentsView.as_view(),
+    #     name="flow-deployments-list",
+    # ),
+    # path(
+    #     "deployments/<int:flow_trace>/run/",
+    #     flow_views.FlowRunApiView.as_view(),
+    #     name="flow-deployments-create",
+    # ),
+    # path("results/", flow_views.FlowResultView.as_view(), name="flow-results"),
+    # path("run/", flow_views.FlowTraceRunCompositeView.as_view(), name="flow-trace-run"),
     path(
         "generate/<int:report_id>/html/",
         report_views.ReportToHtmlView.as_view(),
@@ -144,8 +140,13 @@ urlpatterns = [
         name="generate-pdf",
     ),
     path(
-        "crews/marketing/report",
+        "crews/marketing/report/",
         agent_views.URLMarketingCrewView.as_view(),
         name="marketing-report",
+    ),
+    path(
+        "chains/tasks/<str:task_id>/report/",
+        report_views.ReportFromChainTaskIdView.as_view(),
+        name="report-from-task",
     ),
 ]

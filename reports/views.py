@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions, generics, views
 from rest_framework.response import Response
 from rest_framework import status
 from django.http.response import FileResponse
@@ -60,3 +60,15 @@ class ReportToPDFView(generics.RetrieveAPIView):
             from_string(html, f.name)
             short_report = open(f.name, "rb")
             return FileResponse(short_report, as_attachment=True, filename="report.pdf")
+
+
+class ReportFromChainTaskIdView(views.APIView):
+    """
+    Get a report from a chain task ID
+    """
+
+    def get(self, request, task_id: str, *args, **kwargs):
+        parsed_report = models.ParsedReport.objects.get(task_id=task_id)
+        report = models.Report.objects.get(report=parsed_report)
+        report_serializer = serializers.ReportSerializer(report)
+        return Response(report_serializer.data, status=status.HTTP_200_OK)
