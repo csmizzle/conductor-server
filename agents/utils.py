@@ -23,11 +23,12 @@ def save_pydantic_crew_run(
         created_by=user,
         result=pydantic_crew_run.result,
     )
-    for task in pydantic_crew_run.task_outputs:
+    for task in pydantic_crew_run.tasks:
         task_model = agents_models.CrewTask.objects.create(
             created_by=user,
             description=task.description,
-            output=task.raw_output,
+            agent_role=task.agent_role,
+            output=task.result,
         )
         crew_run.tasks.add(task_model)
     crew_run.save()

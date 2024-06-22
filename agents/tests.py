@@ -130,18 +130,16 @@ class SaveCrewRunTestCase(TestCase):
         self.client.force_authenticate(user=self.user)
         self.crew_run = PydanticCrewRun(
             **{
-                "task_outputs": [
+                "tasks": [
                     {
                         "description": "test description",
-                        "summary": "test summary",
-                        "exported_output": "test exported output",
-                        "raw_output": "test raw output",
+                        "result": "test result",
+                        "agent_role": "test agent role",
                     },
                     {
                         "description": "test description",
-                        "summary": "test summary",
-                        "exported_output": "test exported output",
-                        "raw_output": "test raw output",
+                        "result": "test result",
+                        "agent_role": "test agent role",
                     },
                 ],
                 "result": "this is a test results",

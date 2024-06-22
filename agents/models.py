@@ -9,6 +9,7 @@ class CrewTask(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    agent_role = models.CharField(max_length=510, blank=True, null=True)
     description = models.TextField()
     output = models.TextField()
 
