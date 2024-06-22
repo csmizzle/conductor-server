@@ -1,10 +1,12 @@
 from rest_framework.views import APIView
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
-from agents.serializers import URLMarketingCrewSerializer
+from agents import serializers as agent_serializers
 from agents.tasks import run_marketing_report_task
+from agents import models as agent_models
 from chains import models as chain_models
 from chains import serializers as chain_serializers
 import json
@@ -16,11 +18,13 @@ class URLMarketingCrewView(APIView):
     """
 
     @swagger_auto_schema(
-        request_body=URLMarketingCrewSerializer,
+        request_body=agent_serializers.URLMarketingCrewSerializer,
         operation_description="Create a marketing report",
     )
     def post(self, request: Request) -> Response:
-        request_serializer = URLMarketingCrewSerializer(data=request.data)
+        request_serializer = agent_serializers.URLMarketingCrewSerializer(
+            data=request.data
+        )
         request_serializer.is_valid(raise_exception=True)
         # create chain event
         event = chain_models.ChainEvent.objects.create(
@@ -42,3 +46,11 @@ class URLMarketingCrewView(APIView):
         )
         task_serializer = chain_serializers.ChainTaskSerializer(task)
         return Response(task_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CrewRunReadOnlyViewSet(ReadOnlyModelViewSet):
+    queryset = agent_models.CrewRun.objects.all()
+    serializer_class = agent_serializers.CrewRunSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(created_by=self.request.user)

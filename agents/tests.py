@@ -4,12 +4,18 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from agents.utils import run_url_marketing_report, save_pydantic_report
+from agents.utils import (
+    run_url_marketing_report,
+    save_pydantic_report,
+    save_pydantic_crew_run,
+)
 from reports.models import Report
+from agents import models as agent_models
 from chains import models
 import json
 from conductor.reports.models import Report as PydanticReport
 from conductor.reports.models import ReportStyle
+from conductor.crews.models import CrewRun as PydanticCrewRun
 
 
 class MarketingReportInputChainTest(TestCase):
@@ -108,5 +114,44 @@ class SavePydanticReportTestCase(TestCase):
             user=self.user,
             task=self.task,
         )
-        print("Report", report.__dict__)
         assert isinstance(report, Report)
+
+
+class SaveCrewRunTestCase(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_superuser(username="testowy", password="test")
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.crew_run = PydanticCrewRun(
+            **{
+                "task_outputs": [
+                    {
+                        "description": "test description",
+                        "summary": "test summary",
+                        "exported_output": "test exported output",
+                        "raw_output": "test raw output",
+                    },
+                    {
+                        "description": "test description",
+                        "summary": "test summary",
+                        "exported_output": "test exported output",
+                        "raw_output": "test raw output",
+                    },
+                ],
+                "result": "this is a test results",
+            }
+        )
+
+    def test_save_crew_run(self) -> None:
+        crew_run = save_pydantic_crew_run(
+            pydantic_crew_run=self.crew_run,
+            user=self.user,
+        )
+        assert isinstance(crew_run, agent_models.CrewRun)
+        assert crew_run.tasks.count() == 2
+        response = self.client.get(
+            reverse("runs-list"),
+            content_type="application/json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1

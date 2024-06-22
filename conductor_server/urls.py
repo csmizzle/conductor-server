@@ -84,6 +84,11 @@ router.register(
     flow_views.FlowTraceViewSet,
     basename="flows",
 )
+router.register(
+    r"runs",
+    agent_views.CrewRunReadOnlyViewSet,
+    basename="runs",
+)
 
 
 urlpatterns = [

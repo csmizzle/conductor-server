@@ -5,10 +5,33 @@ from django.contrib.auth.models import User
 import logging
 from chains import models as chains_models
 from reports import models as report_models
-from conductor.crews.marketing import url_marketing_report
+from agents import models as agents_models
+from conductor.crews.marketing import run_marketing_crew, create_marketing_report
 from conductor.reports.models import Report, ReportStyle
+from conductor.crews.models import CrewRun
 
 logger = logging.getLogger(__name__)
+
+
+def save_pydantic_crew_run(
+    pydantic_crew_run: CrewRun, user: User
+) -> agents_models.CrewRun:
+    """
+    Save a Pydantic crew run to the database
+    """
+    crew_run = agents_models.CrewRun.objects.create(
+        created_by=user,
+        result=pydantic_crew_run.result,
+    )
+    for task in pydantic_crew_run.task_outputs:
+        task_model = agents_models.CrewTask.objects.create(
+            created_by=user,
+            description=task.description,
+            output=task.raw_output,
+        )
+        crew_run.tasks.add(task_model)
+    crew_run.save()
+    return crew_run
 
 
 def save_pydantic_report(
@@ -63,12 +86,25 @@ def run_url_marketing_report(
     task.status = chains_models.ChainTaskStatus.RUNNING
     task.save()
     try:
-        url_report = url_marketing_report(
+        # run crew
+        logger.info("Running crew ...")
+        crew_run = run_marketing_crew(
             url=url,
             report_style=report_style_enum,
         )
+        # save crew run
+        logger.info("Saving crew run ...")
+        crew_run = save_pydantic_crew_run(
+            user=user,
+            pydantic_crew_run=crew_run,
+        )
+        # create marketing report
+        logger.info("Creating marketing report ...")
+        url_report = create_marketing_report(
+            crew_run=crew_run,
+            report_style=report_style_enum,
+        )
         # save event status and save report
-        # save raw output to event
         logger.info("Saving raw result ...")
         event.output = url_report.raw
         event.save()
