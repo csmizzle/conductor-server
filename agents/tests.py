@@ -17,7 +17,7 @@ class MarketingReportInputChainTest(TestCase):
         self.user = User.objects.create_superuser(username="testowy", password="test")
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-        self.valid_payload = {"url": "trssllc.com"}
+        self.valid_payload = {"url": "trssllc.com", "style": ReportStyle.BULLETED.name}
         self.invalid_payload = {"url": None}
 
     def test_create_valid_report(self):
@@ -40,12 +40,13 @@ class MarketingReportInputChainTest(TestCase):
 
 class MarketingReportTestCase(TestCase):
     def setUp(self) -> None:
-        self.url = "https://trssllc.com"
+        self.url = "https://parenthetic.io"
+        self.style = ReportStyle.BULLETED.name
         self.user = User.objects.create_superuser(username="testowy", password="test")
         self.event = models.ChainEvent.objects.create(
             created_by=self.user,
             chain_name=run_url_marketing_report.__name__,
-            input=json.dumps({"url": self.url}),
+            input=json.dumps({"url": self.url, "style": self.style}),
         )
         self.task = models.ChainTask.objects.create(
             created_by=self.user, event_id=self.event
@@ -54,6 +55,7 @@ class MarketingReportTestCase(TestCase):
     def test_create_marketing_report(self):
         report = run_url_marketing_report(
             url=self.url,
+            report_style=self.style,
             user_id=self.user.id,
             event_id=self.event.id,
             task_id=self.task.task_id,

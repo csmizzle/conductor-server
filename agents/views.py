@@ -32,8 +32,10 @@ class URLMarketingCrewView(APIView):
         task = chain_models.ChainTask.objects.create(
             created_by=request.user, event_id=event
         )
+        # create the celery task
         run_marketing_report_task.delay(
             url=request_serializer.validated_data["url"],
+            report_style=request_serializer.validated_data["style"],
             user_id=request.user.id,
             task_id=task.task_id,
             event_id=event.id,

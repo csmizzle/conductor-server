@@ -6,7 +6,7 @@ import logging
 from chains import models as chains_models
 from reports import models as report_models
 from conductor.crews.marketing import url_marketing_report
-from conductor.reports.models import Report
+from conductor.reports.models import Report, ReportStyle
 
 logger = logging.getLogger(__name__)
 
@@ -53,11 +53,9 @@ def save_pydantic_report(
 
 
 def run_url_marketing_report(
-    url: str,
-    user_id: int,
-    task_id: str,
-    event_id: int,
+    url: str, user_id: int, task_id: str, event_id: int, report_style: str
 ) -> report_models.Report:
+    report_style_enum = style_input_to_enum(report_style)
     task = chains_models.ChainTask.objects.get(pk=task_id)
     event = chains_models.ChainEvent.objects.get(pk=event_id)
     user = User.objects.get(pk=user_id)
@@ -65,7 +63,10 @@ def run_url_marketing_report(
     task.status = chains_models.ChainTaskStatus.RUNNING
     task.save()
     try:
-        url_report = url_marketing_report(url)
+        url_report = url_marketing_report(
+            url=url,
+            report_style=report_style_enum,
+        )
         # save event status and save report
         # save raw output to event
         logger.info("Saving raw result ...")
@@ -83,7 +84,7 @@ def run_url_marketing_report(
         task.save()
         # update event output
         logger.info("Saving event output ...")
-        event.output = url_report.dict()
+        event.output = url_report.raw
         event.save()
         return report
     except Exception as exception:
@@ -91,3 +92,13 @@ def run_url_marketing_report(
         task.status = chains_models.ChainTaskStatus.FAILED
         task.save()
         raise exception
+
+
+def style_input_to_enum(style: str) -> ReportStyle:
+    """
+    Convert style input to ReportStyle enum
+    """
+    if style == "BULLETED":
+        return ReportStyle.BULLETED
+    elif style == "NARRATIVE":
+        return ReportStyle.NARRATIVE
