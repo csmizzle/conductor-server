@@ -70,7 +70,7 @@ class Report(models.Model):
     style = models.CharField(
         max_length=255,
         choices=[(tag.name, tag.value) for tag in pydantic_models.ReportStyle],
-        default=pydantic_models.ReportStyle.BULLETED.name,
+        default=pydantic_models.ReportStyle.BULLETED.value,
     )
 
     def __str__(self):

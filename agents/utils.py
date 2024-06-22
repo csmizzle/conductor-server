@@ -130,11 +130,11 @@ def run_url_marketing_report(
         raise exception
 
 
-def style_input_to_enum(style: str) -> ReportStyle:
+def style_input_to_enum(style: str) -> str:
     """
     Convert style input to ReportStyle enum
     """
     if style == "BULLETED":
-        return ReportStyle.BULLETED
+        return ReportStyle.BULLETED.value
     elif style == "NARRATIVE":
-        return ReportStyle.NARRATIVE
+        return ReportStyle.NARRATIVE.value
