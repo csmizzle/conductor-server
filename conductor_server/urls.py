@@ -23,6 +23,7 @@ from chains import views as chains_views
 from reports import views as report_views
 from agents import views as agent_views
 
+
 api_info = openapi.Info(
     title="Conductor API",
     default_version="v1",
@@ -148,5 +149,10 @@ urlpatterns = [
         "chains/tasks/<str:task_id>/report/",
         report_views.ReportFromChainTaskIdView.as_view(),
         name="report-from-task",
+    ),
+    path(
+        "query/reports/",
+        report_views.GetReportByTitleView.as_view(),
+        name="query-reports",
     ),
 ]
