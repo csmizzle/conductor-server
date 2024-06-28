@@ -43,10 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "drf_yasg",
     "search",
-    "collect",
     "chains",
     "rest_framework_nested",
-    "flows",
     "reports",
     "agents",
 ]
