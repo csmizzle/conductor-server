@@ -2,20 +2,16 @@ FROM python:3.12.3
 RUN apt-get update && apt-get install -y \
     git gcc python3-dev wkhtmltopdf
 
+# Install the application
 WORKDIR /app
 COPY ./requirements.txt ./requirements.txt
 RUN pip cache purge && pip install --no-cache-dir -r requirements.txt
 
+# Copy the rest of the application
 COPY ./conductor_server ./conductor_server
 COPY ./agents ./agents
-COPY ./search ./search
-
-COPY ./buckets ./buckets
 COPY ./chains ./chains
-COPY ./collect ./collect
-COPY ./flows ./flows
 COPY ./reports ./reports
-COPY ./agents ./agents
 COPY ./manage.py ./manage.py
 COPY ./start.sh ./start.sh
 COPY ./start.dev.sh ./start.dev.sh
