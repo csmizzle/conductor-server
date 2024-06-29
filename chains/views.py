@@ -49,13 +49,11 @@ class SummarizeContentViewSet(ReadCreateModelViewSet):
         """
         Create a new summary.
         """
-        flow_trace = None
         request_serializer = serializers.CreateChainSummarizeContentSerializer(
             data=request.data
         )
         request_serializer.is_valid(raise_exception=True)
         event = models.ChainEvent.objects.create(
-            flow_trace=flow_trace,
             created_by=request.user,
             chain_name=chains.map_reduce_summarize.__name__,
             input=json.dumps(request_serializer.validated_data),
@@ -92,7 +90,6 @@ class ApolloInputChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo input
         """
-        flow_trace = None
         request_serializer = serializers.CreateApolloInputSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         apollo_input = chains.create_apollo_input_structured(
@@ -100,7 +97,6 @@ class ApolloInputChainView(ReadCreateModelViewSet):
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
-                "flow_trace": flow_trace.id if flow_trace else None,
                 "created_by": request.user.id,
                 "chain_name": chains.create_apollo_input_structured.__name__,
                 "input": request_serializer.validated_data["query"],
@@ -134,7 +130,6 @@ class ApolloContextChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo context
         """
-        flow_trace = None
         request_serializer = serializers.ApolloContextInputChain(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         apollo_context = apollo.generate_apollo_person_search_context(
@@ -143,7 +138,6 @@ class ApolloContextChainView(ReadCreateModelViewSet):
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
-                "flow_trace": flow_trace.id if flow_trace else None,
                 "created_by": request.user.id,
                 "chain_name": apollo.generate_apollo_person_search_context.__name__,
                 "input": json.dumps(
@@ -186,7 +180,6 @@ class CreateEmailChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo context
         """
-        flow_trace = None
         request_serializer = serializers.EmailFromContextSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         email_from_context = chains.create_email_from_context(
@@ -196,7 +189,6 @@ class CreateEmailChainView(ReadCreateModelViewSet):
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
-                "flow_trace": flow_trace.id if flow_trace else None,
                 "created_by": request.user.id,
                 "chain_name": chains.create_email_from_context_structured.__name__,
                 "input": json.dumps(
@@ -232,7 +224,6 @@ class ApolloUrlContextChainView(ReadCreateModelViewSet):
         """
         Create a new Apollo context
         """
-        flow_trace = None
         request_serializer = serializers.ApolloUrlContextInputChain(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         apollo_context = apollo.generate_apollo_person_domain_search_context(
@@ -240,7 +231,6 @@ class ApolloUrlContextChainView(ReadCreateModelViewSet):
         )
         response_serializer = serializers.ChainEventSerializer(
             data={
-                "flow_trace": flow_trace.id if flow_trace else None,
                 "created_by": request.user.id,
                 "chain_name": apollo.generate_apollo_person_domain_search_context.__name__,
                 "input": json.dumps(

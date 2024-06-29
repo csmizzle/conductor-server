@@ -31,7 +31,6 @@ class URLMarketingCrewView(APIView):
         request_serializer.is_valid(raise_exception=True)
         # create chain event
         event = chain_models.ChainEvent.objects.create(
-            flow_trace=None,
             created_by=request.user,
             chain_name=run_marketing_report_task.__name__,
             input=json.dumps(request_serializer.validated_data),
