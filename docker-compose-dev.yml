@@ -3,7 +3,7 @@ version: '3'
 services:
   server:
     container_name: conductor-server
-    image: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-server-base:latest
+    image: 905418331516.dkr.ecr.us-east-1.amazonaws.com/conductor-server:latest
     command: ["sh", "./start.dev.sh"]
     env_file:
       - dev.env
@@ -21,7 +21,7 @@ services:
       retries: 5
   server-celery:
     container_name: conductor-server-celery
-    image: 851725258560.dkr.ecr.us-east-1.amazonaws.com/conductor-server-base:latest
+    image: 905418331516.dkr.ecr.us-east-1.amazonaws.com/conductor-server:latest
     command: ["sh", "./start.celery.sh"]
     env_file:
       - dev.env
