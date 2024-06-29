@@ -12,6 +12,7 @@ COPY ./conductor_server ./conductor_server
 COPY ./agents ./agents
 COPY ./chains ./chains
 COPY ./reports ./reports
+COPY ./search ./search
 COPY ./manage.py ./manage.py
 COPY ./start.sh ./start.sh
 COPY ./start.dev.sh ./start.dev.sh
